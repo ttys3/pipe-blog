@@ -4,11 +4,11 @@
       <form action="" class="login__form">
 
         <label for="username" class="login__label">username
-        <input type="text" class="login__input" name="username" id="username" v-model="username"/>
+        <input type="text" class="login__input" name="username" id="username" v-model="username" v-on:keyup.enter="login"/>
         </label>
 
         <label for="password" class="login__label">password
-        <input type="password" class="login__input" name="password" id="password" v-model="password"/>
+        <input type="password" class="login__input" name="password" id="password" v-model="password" v-on:keyup.enter="login"/>
         </label>
 
         <v-btn class="btn--small btn--info" @click="login">Login</v-btn>
