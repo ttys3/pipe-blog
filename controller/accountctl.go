@@ -20,6 +20,7 @@ import (
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 	"github.com/b3log/pipe/util"
+	"fmt"
 	"net/http"
 
 	"github.com/b3log/gulu"
@@ -52,6 +53,10 @@ type loginReq struct {
 }
 
 func loginAction(c *gin.Context) {
+	result := gulu.Ret.NewResult()
+	defer c.JSON(http.StatusOK, result)
+	result.Code = util.CodeErr
+
 	// init the admin user
 	if !service.Init.Inited() {
 		user := &model.User{
@@ -62,14 +67,13 @@ func loginAction(c *gin.Context) {
 		}
 		if err := user.UpdatePasswd("admin"); err != nil {
 			logger.Errorf("init admin user failed: " + err.Error())
-			c.Status(http.StatusInternalServerError)
+			result.Msg = "init admin user failed: " + err.Error()
 			return
 		}
 
 		if err := service.Init.InitPlatform(user); nil != err {
 			logger.Errorf("init platform via github login failed: " + err.Error())
-			c.Status(http.StatusInternalServerError)
-
+			result.Msg = "init platform via github login failed: " + err.Error()
 			return
 		}
 	}
@@ -77,27 +81,27 @@ func loginAction(c *gin.Context) {
 	var req loginReq
 	if err :=c.BindJSON(&req); err != nil {
 		logger.Errorf("invalid login request: " + err.Error())
-		c.Status(http.StatusInternalServerError)
+		result.Msg = "invalid login request: " + err.Error()
 		return
 	}
 
 	user := service.User.GetUserByName(req.Username)
 	if user == nil {
 		logger.Errorf("no user found: " + req.Username)
-		c.Status(http.StatusNotFound)
+		result.Msg = "user or password validation failed"
 		return
 	}
 
 	ownBlog := service.User.GetOwnBlog(user.ID)
 	if nil == ownBlog {
-		logger.Warnf("can not get user by name [" + userName + "]")
-		c.Status(http.StatusNotFound)
+		logger.Warnf("can not get blog for user [" + userName + "]")
+		result.Msg = "can not get blog for user [" + userName + "]"
 		return
 	}
 
 	if err := user.VerifyPasswd(req.Password); err != nil {
 		logger.Warnf("user password verify errror: %s", err)
-		c.Status(http.StatusForbidden)
+		result.Msg = "user or password validation failed"
 		return
 	}
 
@@ -113,8 +117,8 @@ func loginAction(c *gin.Context) {
 	}
 	if err := session.Save(c); nil != err {
 		logger.Errorf("saves session failed: " + err.Error())
-		c.Status(http.StatusInternalServerError)
+		result.Msg = fmt.Sprintf("saves session failed: %s", err.Error())
 	}
-
-	c.Status(http.StatusOK)
+	result.Code = util.CodeOk
+	result.Msg = "login success"
 }

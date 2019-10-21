@@ -45,6 +45,7 @@
         if (responseData) {
           console.log(responseData)
         }
+        return responseData
       },
       async login (event) {
         event.preventDefault()
@@ -54,8 +55,21 @@
           snackModify: 'success',
         })
         try {
-          await this.doLogin()
-          window.location.href = "/admin/"
+          const rs = await this.doLogin()
+          console.log('rs: %o', rs)
+          if (rs.code === 0) {
+            this.$store.commit('setSnackBar', {
+              snackBar: true,
+              snackMsg: rs.msg,
+              snackModify: 'success',
+            })
+            window.location.href = "/admin/"
+          } else {
+            this.$store.commit('setSnackBar', {
+              snackBar: true,
+              snackMsg: rs.msg,
+            })
+          }
         } catch (e) {
           console.log(e)
         }

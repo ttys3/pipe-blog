@@ -20,11 +20,11 @@ import (
 	"net/http"
 
 	"github.com/b3log/gulu"
+	"github.com/gin-gonic/gin"
+
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
-	"github.com/b3log/pipe/theme"
 	"github.com/b3log/pipe/util"
-	"github.com/gin-gonic/gin"
 )
 
 // UpdateThemeAction updates theme.
@@ -56,7 +56,7 @@ func GetThemesAction(c *gin.Context) {
 
 	session := util.GetSession(c)
 
-	currentID := theme.Themes[0]
+	currentID := service.Themes[0]
 	themeNameSetting := service.Setting.GetSetting(model.SettingCategoryTheme, model.SettingNameThemeName, session.BID)
 	if nil == themeNameSetting {
 		logger.Errorf("not found theme name setting")
@@ -65,7 +65,7 @@ func GetThemesAction(c *gin.Context) {
 	}
 
 	var themes []*ConsoleTheme
-	for _, themeName := range theme.Themes {
+	for _, themeName := range service.Themes {
 		consoleTheme := &ConsoleTheme{
 			Name:         themeName,
 			ThumbnailURL: model.Conf.Server + "/theme/x/" + themeName + "/thumbnail.jpg",

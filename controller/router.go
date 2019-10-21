@@ -25,13 +25,14 @@ import (
 	"strings"
 
 	"github.com/b3log/gulu"
-	"github.com/b3log/pipe/controller/console"
-	"github.com/b3log/pipe/model"
-	"github.com/b3log/pipe/theme"
-	"github.com/b3log/pipe/util"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+
+	"github.com/b3log/pipe/controller/console"
+	"github.com/b3log/pipe/model"
+	"github.com/b3log/pipe/service"
+	"github.com/b3log/pipe/util"
 )
 
 // Logger
@@ -158,7 +159,7 @@ func MapRoutes() *gin.Engine {
 	ret.StaticFile("/sw.min.js", "theme/sw.min.js")
 	ret.StaticFile("/halt.html", "theme/halt.html")
 
-	for _, theme := range theme.Themes {
+	for _, theme := range service.Themes {
 		themePath := "theme/x/" + theme
 		ret.Static("/theme/x/"+theme+"/css", themePath+"/css")
 		ret.Static("/theme/x/"+theme+"/js", themePath+"/js")

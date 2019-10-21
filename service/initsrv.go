@@ -22,10 +22,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/b3log/pipe/model"
-	"github.com/b3log/pipe/theme"
-	"github.com/b3log/pipe/util"
 	"github.com/jinzhu/gorm"
+
+	"github.com/b3log/pipe/model"
+	"github.com/b3log/pipe/util"
 )
 
 // Init service.
@@ -297,7 +297,7 @@ func initThemeSettings(tx *gorm.DB, blogID uint64) error {
 	if err := tx.Create(&model.Setting{
 		Category: model.SettingCategoryTheme,
 		Name:     model.SettingNameThemeName,
-		Value:    theme.DefaultTheme,
+		Value:    DefaultTheme,
 		BlogID:   blogID}).Error; nil != err {
 		return err
 	}

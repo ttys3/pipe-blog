@@ -15,16 +15,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Package theme includes theme related manipulations.
-package theme
+package service
 
 import (
 	"os"
 
 	"github.com/b3log/gulu"
 )
-
-// Logger
-var logger = gulu.Log.NewLogger(os.Stdout)
 
 // DefaultTheme represents the default theme name.
 const DefaultTheme = "Littlewin"
@@ -33,8 +30,11 @@ const DefaultTheme = "Littlewin"
 var Themes []string
 
 // Load loads themes.
-func Load() {
-	f, _ := os.Open("theme/x")
+func LoadThemes() {
+	f, err := os.Open("theme/x")
+	if err != nil {
+		logger.Warnf("warn: theme dir [theme/x] does not exists")
+	}
 	names, _ := f.Readdirnames(-1)
 	f.Close()
 
