@@ -1,8 +1,7 @@
 #!/bin/bash
 
-GOPROXY=https://goproxy.io
-go build -i -v
-cd console && npm install && npm run build
-cd ../theme && npm install && npm run build
+GOPROXY=https://goproxy.cn,direct go build -i -v
+cd console && yarn install && yarn run build
+cd ../theme && yarn install && yarn run build
 
 echo 'build pipe done'
