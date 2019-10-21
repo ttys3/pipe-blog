@@ -17,6 +17,7 @@
 package console
 
 import (
+	"github.com/b3log/pipe/model"
 	"net/http"
 
 	"github.com/b3log/gulu"
@@ -40,11 +41,19 @@ func UpdateAccountAction(c *gin.Context) {
 
 	b3Key := arg["b3key"].(string)
 	avatarURL := arg["avatarURL"].(string)
+	nickname := arg["nickname"].(string)
+	password := arg["password"].(string)
 
 	session := util.GetSession(c)
 	user := service.User.GetUserByName(session.UName)
 	user.B3Key = b3Key
 	user.AvatarURL = avatarURL
+	user.Nickname = nickname
+	if password != "" {
+		if h, err:= model.PasswdHash([]byte(password)); err == nil {
+			user.PasswdHash = h
+		}
+	}
 	if err := service.User.UpdateUser(user); nil != err {
 		result.Code = util.CodeErr
 		result.Msg = err.Error()
@@ -64,6 +73,7 @@ func GetAccountAction(c *gin.Context) {
 	session := util.GetSession(c)
 	data := map[string]interface{}{}
 	data["name"] = session.UName
+	data["nickname"] = session.UNickname
 	data["avatarURL"] = session.UAvatar
 	data["b3Key"] = session.UB3Key
 

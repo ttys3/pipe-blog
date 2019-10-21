@@ -33,7 +33,7 @@
         requiredRules: [
           (v) => numberOnly.call(this, v)
         ],
-        feedOutputMode: 0,
+        feedOutputMode: 1,
         feedOutputModeItems: [{
           'text': `${this.$t('abstract', this.$store.state.locale)}`,
           'value': 0

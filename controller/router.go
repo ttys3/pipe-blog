@@ -75,15 +75,19 @@ func MapRoutes() *gin.Engine {
 	ret.Use(sessions.Sessions("pipe", store))
 	ret.GET(util.PathPlatInfo, showPlatInfoAction)
 	ret.GET(util.PathSitemap, outputSitemapAction)
+	// Set a lower memory limit for multipart forms (default is 32 MiB)
+	ret.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	api := ret.Group(util.PathAPI)
 	api.POST("/logout", logoutAction)
+	api.POST("/login", loginAction)
 	api.Any("/hp/*apis", util.HacPaiAPI())
 	api.GET("/status", getStatusAction)
 	api.GET("/check-version", console.CheckVersionAction)
 	api.GET("/blogs/top", showTopBlogsAction)
 	api.GET("/oauth/github/redirect", redirectGitHubLoginAction)
 	api.GET("/oauth/github/callback", githubCallbackAction)
+	api.GET("/storage/:filename", storageAction)
 
 	consoleGroup := api.Group("/console")
 	consoleGroup.Use(console.LoginCheck)
@@ -125,6 +129,7 @@ func MapRoutes() *gin.Engine {
 	consoleGroup.POST("/import/md", console.ImportMarkdownAction)
 	consoleGroup.GET("/export/md", console.ExportMarkdownAction)
 	// consoleGroup.POST("/blogs/switch/:id", console.BlogSwitchAction)
+	consoleGroup.POST("/upload", console.UploadAction)
 
 	consoleSettingsGroup := consoleGroup.Group("/settings")
 	consoleSettingsGroup.GET("/basic", console.GetBasicSettingsAction)

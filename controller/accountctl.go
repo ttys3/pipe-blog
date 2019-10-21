@@ -17,12 +17,18 @@
 package controller
 
 import (
+	"github.com/b3log/pipe/model"
+	"github.com/b3log/pipe/service"
+	"github.com/b3log/pipe/util"
 	"net/http"
 
 	"github.com/b3log/gulu"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
+
+const userName = "admin"
+const DftAvatarURl = "https://avatars0.githubusercontent.com/u/41882455?s=40&v=4"
 
 // logoutAction logout a user.
 func logoutAction(c *gin.Context) {
@@ -38,4 +44,77 @@ func logoutAction(c *gin.Context) {
 	if err := session.Save(); nil != err {
 		logger.Errorf("saves session failed: " + err.Error())
 	}
+}
+
+type loginReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func loginAction(c *gin.Context) {
+	// init the admin user
+	if !service.Init.Inited() {
+		user := &model.User{
+			Name:      "admin",
+			AvatarURL: DftAvatarURl,
+			B3Key:     "",
+			GithubId:  "",
+		}
+		if err := user.UpdatePasswd("admin"); err != nil {
+			logger.Errorf("init admin user failed: " + err.Error())
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+
+		if err := service.Init.InitPlatform(user); nil != err {
+			logger.Errorf("init platform via github login failed: " + err.Error())
+			c.Status(http.StatusInternalServerError)
+
+			return
+		}
+	}
+
+	var req loginReq
+	if err :=c.BindJSON(&req); err != nil {
+		logger.Errorf("invalid login request: " + err.Error())
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+	user := service.User.GetUserByName(req.Username)
+	if user == nil {
+		logger.Errorf("no user found: " + req.Username)
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	ownBlog := service.User.GetOwnBlog(user.ID)
+	if nil == ownBlog {
+		logger.Warnf("can not get user by name [" + userName + "]")
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	if err := user.VerifyPasswd(req.Password); err != nil {
+		logger.Warnf("user password verify errror: %s", err)
+		c.Status(http.StatusForbidden)
+		return
+	}
+
+	session := &util.SessionData{
+		UID:     user.ID,
+		UName:   user.Name,
+		UNickname: user.Nickname,
+		UB3Key:  user.B3Key,
+		UAvatar: user.AvatarURL,
+		URole:   ownBlog.UserRole,
+		BID:     ownBlog.ID,
+		BURL:    ownBlog.URL,
+	}
+	if err := session.Save(c); nil != err {
+		logger.Errorf("saves session failed: " + err.Error())
+		c.Status(http.StatusInternalServerError)
+	}
+
+	c.Status(http.StatusOK)
 }

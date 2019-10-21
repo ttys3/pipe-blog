@@ -27,6 +27,7 @@ import (
 type SessionData struct {
 	UID     uint64 // user ID
 	UName   string // username
+	UNickname string // nickname
 	UB3Key  string // user B3 key
 	URole   int    // user role
 	UAvatar string // user avatar URL

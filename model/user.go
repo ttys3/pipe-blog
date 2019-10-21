@@ -18,6 +18,7 @@ package model
 
 import (
 	"github.com/b3log/pipe/util"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // User model.
@@ -25,6 +26,7 @@ type User struct {
 	Model
 
 	Name              string `gorm:"size:32" json:"name"`
+	PasswdHash		  string `gorm:"size:64" json:"-"`
 	Nickname          string `gorm:"size:32" json:"nickname"`
 	AvatarURL         string `gorm:"size:255" json:"avatarURL"`
 	B3Key             string `gorm:"size:32" json:"b3Key"`
@@ -44,4 +46,46 @@ const (
 // AvatarURLWithSize returns avatar URL with the specified size.
 func (u *User) AvatarURLWithSize(size int) string {
 	return util.ImageSize(u.AvatarURL, size, size)
+}
+
+func (u *User) UpdatePasswd(newPwd string) error {
+	if h, e := PasswdHash([]byte(newPwd)); e == nil {
+		u.PasswdHash = h
+		return e
+	} else {
+		return e
+	}
+}
+
+func (u *User) VerifyPasswd(plainPwd string) error {
+	return ComparePasswords(u.PasswdHash, []byte(plainPwd))
+}
+
+func PasswdHash(pwd []byte) (string, error) {
+
+	// Use GenerateFromPassword to hash & salt pwd.
+	// MinCost is just an integer constant provided by the bcrypt
+	// package along with DefaultCost & MaxCost.
+	// The cost can be any value you want provided it isn't lower
+	// than the MinCost (4)
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		return "", err
+	} else {
+		// GenerateFromPassword returns a byte slice so we need to
+		// convert the bytes to a string and return it
+		return string(hash), nil
+	}
+}
+
+func ComparePasswords(hashedPwd string, plainPwd []byte) error {
+	// Since we'll be getting the hashed password from the DB it
+	// will be a string so we'll need to convert it to a byte slice
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

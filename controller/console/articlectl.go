@@ -80,19 +80,30 @@ func MarkdownAction(c *gin.Context) {
 }
 
 var uploadTokenCheckTime, uploadTokenTime int64
-var uploadToken, uploadURL = "", "https://hacpai.com/upload/client"
+var uploadToken, uploadURL = "no-token-needed", "http://localhost:5897/api/console/upload"
+
+type UploadApiData struct {
+	UploadToken string `json:"uploadToken"`
+	UploadURL string `json:"uploadURL"`
+}
 
 // UploadTokenAction gets a upload token.
 func UploadTokenAction(c *gin.Context) {
 	result := gulu.Ret.NewResult()
 	defer c.JSON(http.StatusOK, result)
 
-	session := util.GetSession(c)
-	if "" == session.UB3Key {
-		result.Code = util.CodeErr
-
-		return
+	result.Data = UploadApiData{
+		UploadToken: uploadToken,
+		UploadURL: uploadURL,
 	}
+	return
+
+	session := util.GetSession(c)
+	//if "" == session.UB3Key {
+	//	result.Code = util.CodeErr
+	//
+	//	return
+	//}
 
 	data := map[string]interface{}{}
 	result.Data = &data

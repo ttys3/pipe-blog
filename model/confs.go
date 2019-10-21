@@ -70,12 +70,14 @@ type Configuration struct {
 	Port                  string // listen port
 	AxiosBaseURL          string // axio base URL
 	MockServer            string // mock server
+	StoragePath			  string
 }
 
 // LoadConf loads the configurations. Command-line arguments will override configuration file.
 func LoadConf() {
 	version := flag.Bool("version", false, "prints current pipe version")
 	confPath := flag.String("conf", "pipe.json", "path of pipe.json")
+	confStorage := flag.String("storage", "./storage", "path to storage dir")
 	confServer := flag.String("server", "", "this will override Conf.Server if specified")
 	confStaticServer := flag.String("static_server", "", "this will override Conf.StaticServer if specified")
 	confStaticResourceVer := flag.String("static_resource_ver", "", "this will override Conf.StaticResourceVersion if specified")
@@ -148,6 +150,10 @@ func LoadConf() {
 	}
 	if "" == Conf.StaticServer {
 		Conf.StaticServer = Conf.Server
+	}
+
+	if "" != *confStorage {
+		Conf.StoragePath = *confStorage
 	}
 
 	time := strconv.FormatInt(time.Now().UnixNano(), 10)

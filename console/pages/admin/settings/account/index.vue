@@ -1,6 +1,25 @@
 <template>
   <div class="card fn__clear card__body">
     <v-form ref="form">
+
+      <v-text-field
+        :label="$t('password', $store.state.locale)"
+        v-model="password"
+        :counter="64"
+        required
+        @keyup.ctrl.13="accountUpdate"
+        @keyup.meta.13="accountUpdate"
+      ></v-text-field>
+
+      <v-text-field
+        :label="$t('nickname', $store.state.locale)"
+        v-model="nickname"
+        :counter="32"
+        required
+        @keyup.ctrl.13="accountUpdate"
+        @keyup.meta.13="accountUpdate"
+      ></v-text-field>
+
       <v-text-field
         :label="$t('avatarURL', $store.state.locale)"
         v-model="avatarURL"
@@ -53,7 +72,9 @@
         error: false,
         errorMsg: '',
         b3key: '',
-        avatarURL: ''
+        avatarURL: '',
+        nickname: '',
+        password: '',
       }
     },
     head () {
@@ -67,6 +88,8 @@
           return
         }
         const responseData = await this.axios.put('/console/settings/account', {
+          nickname: this.nickname,
+          password: this.password,
           b3key: this.b3key,
           avatarURL: this.avatarURL
         })
@@ -90,6 +113,7 @@
       if (responseData) {
         this.$set(this, 'b3key', responseData.b3Key)
         this.$set(this, 'avatarURL', responseData.avatarURL)
+        this.$set(this, 'nickname', responseData.nickname)
       }
     }
   }
