@@ -129,7 +129,7 @@ export const genMenuData = (app, locale) => [
       },
       {
         title: app.$t('account', locale),
-        link: '/admin/settings/account',
+        link: '/admin/settings/profile',
         role: 2
       },
       {

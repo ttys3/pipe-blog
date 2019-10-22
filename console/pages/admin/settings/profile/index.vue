@@ -87,7 +87,7 @@
         if (!this.$refs.form.validate()) {
           return
         }
-        const responseData = await this.axios.put('/console/settings/account', {
+        const responseData = await this.axios.put('/console/settings/profile', {
           nickname: this.nickname,
           password: this.password,
           b3key: this.b3key,
@@ -109,7 +109,7 @@
       }
     },
     async mounted () {
-      const responseData = await this.axios.get('/console/settings/account')
+      const responseData = await this.axios.get('/console/settings/profile')
       if (responseData) {
         this.$set(this, 'b3key', responseData.b3Key)
         this.$set(this, 'avatarURL', responseData.avatarURL)

@@ -63,6 +63,7 @@
               snackMsg: rs.msg,
               snackModify: 'success',
             })
+            // need full reload
             window.location.href = "/admin/"
           } else {
             this.$store.commit('setSnackBar', {
@@ -76,6 +77,12 @@
       },
     },
     mounted () {
+      // console.log(this.$store.state)
+      if (this.$store.state.role > 0) {
+        window.location.href = "/admin/"
+        this.$router.push('/admin/')
+        return
+      }
       initParticlesJS('particles')
     },
   }

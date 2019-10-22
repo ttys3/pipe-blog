@@ -1,7 +1,7 @@
 export default function ({redirect, store, route}) {
   if (!store.state.isInit) {
-    if (route.path !== '/start') {
-      return redirect('/start')
+    if (route.path !== '/login') {
+      return redirect('/login')
     }
     return
   }
@@ -10,7 +10,7 @@ export default function ({redirect, store, route}) {
     if (!isLogin || store.state.role === 4) {
       redirect('/')
     }
-  } else if (route.path === '/start') {
+  } else if (route.path === '/login') {
     if (isLogin) {
       redirect('/admin')
     }
