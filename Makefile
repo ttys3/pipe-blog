@@ -25,7 +25,7 @@ prep:
 	test -x "$$(command -v rice)" || GO111MODULE=on go install github.com/GeertJohan/go.rice/rice
 	test -x "$$(command -v gox)" || GO111MODULE=on go install github.com/mitchellh/gox
 
-crossbuild: prep
+crossbuild: prep ui-admin ui-theme
 	$(call colorecho,"remove release dir ...")
 	rm -rf release
 	mkdir -p ./release/console
