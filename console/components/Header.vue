@@ -84,9 +84,10 @@
       async logout () {
         const responseData = await this.axios.post('/logout')
         if (responseData.code === 0) {
-          this.$store.commit('setBodySide', '')
-          this.$store.commit('setLogout', 0)
-          this.$router.push('/')
+          // this.$store.commit('setBodySide', '')
+          // this.$store.commit('setLogout', 0)
+          // this.$router.push('/')
+          window.location.href = '/'
         } else {
           this.commit('setSnackBar', {
             snackBar: true,
