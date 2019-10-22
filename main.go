@@ -24,6 +24,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -83,8 +84,8 @@ func main() {
 	handleSignal(server)
 
 	var err error
-	logger.Infof("NanoBlog (v%s build@%s rev@%s) is running [%s]",
-		model.Version, model.BuildDate, model.CommitSHA, model.Conf.Server)
+	logger.Infof("NanoBlog (v%s build@%s rev@%s run@%s) is running [%s]",
+		model.Version, model.BuildDate, model.CommitSHA, runtime.Version(), model.Conf.Server)
 	if model.Conf.Cert != "" && model.Conf.Key != "" {
 		err = server.ListenAndServeTLS(model.Conf.Cert, model.Conf.Key)
 	} else {
