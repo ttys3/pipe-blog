@@ -74,7 +74,7 @@ func (srv *exportService) ExportMarkdowns(blogID uint64) (ret []*MarkdownFile) {
 }
 
 func sanitizeFilename(unsanitized string) string {
-	unsanitized = regexp.MustCompile("[\\?\\\\/:|<>\\*]").ReplaceAllString(unsanitized, " ") // filter out ? \ / : | < > *
+	unsanitized = regexp.MustCompile(`[?/:|<>*]`).ReplaceAllString(unsanitized, " ") // filter out ? \ / : | < > *
 
-	return regexp.MustCompile("\\s+").ReplaceAllString(unsanitized, "_") // white space as underscores
+	return regexp.MustCompile(`\s+`).ReplaceAllString(unsanitized, "_") // white space as underscores
 }
