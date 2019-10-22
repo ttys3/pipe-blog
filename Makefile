@@ -59,13 +59,13 @@ linux:
 	GOPROXY=$(GOPROXY) go build -o "$(APP_NAME)" -i -ldflags "-s -w $(AUTO_VERSIONING)" .
 
 ui-admin:
-	cd console && yarn install && yarn run build
+	cd console && yarn install --verbose && yarn run build
 
 ui-theme:
-	cd theme && yarn install && yarn add aplayer && yarn run build
+	cd theme && yarn install --verbose && yarn add aplayer && yarn run build
 
 dev:
-	cd console && yarn install && yarn run dev
+	cd console && yarn install --verbose && yarn run dev
 
 clean:
 	rm -f ./$(APP_NAME)
