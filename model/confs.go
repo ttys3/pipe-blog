@@ -36,6 +36,10 @@ var logger = gulu.Log.NewLogger(os.Stdout)
 // Version of Pipe.
 var Version = "1.8.9"
 
+var BuildDate = "dev"
+
+var CommitSHA = "dev"
+
 var StaticResourceVersion = "dev"
 
 // Conf of Pipe.

@@ -9,8 +9,10 @@ CGO_ENABLED := 1
 #GOX_OSARCH := linux/amd64 linux/arm64 darwin/amd64 windows/amd64
 PKG_URL := github.com/b3log/pipe/model
 STATIC_RES_VER := $(shell date +%s)
+GIT_VERSION := $(shell git rev-parse --short HEAD)
+DATE_VERSION := $(shell date +%Y%m%d-%H%M)
 APP_VERSION := $(shell cat build.version)
-AUTO_VERSIONING := -X $(PKG_URL).Version=$(APP_VERSION) -X $(PKG_URL).StaticResourceVersion=$(STATIC_RES_VER)
+AUTO_VERSIONING := -X $(PKG_URL).Version=$(APP_VERSION) -X $(PKG_URL).BuildDate=$(DATE_VERSION) -X $(PKG_URL).CommitSHA=$(GIT_VERSION) -X $(PKG_URL).StaticResourceVersion=$(STATIC_RES_VER)
 
 define colorecho
       @TERM=xterm-256color tput setaf 6

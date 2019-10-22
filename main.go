@@ -83,7 +83,8 @@ func main() {
 	handleSignal(server)
 
 	var err error
-	logger.Infof("NanoBlog (v%s) is running [%s]", model.Version, model.Conf.Server)
+	logger.Infof("NanoBlog (v%s build@%s rev@%s) is running [%s]",
+		model.Version, model.BuildDate, model.CommitSHA, model.Conf.Server)
 	if model.Conf.Cert != "" && model.Conf.Key != "" {
 		err = server.ListenAndServeTLS(model.Conf.Cert, model.Conf.Key)
 	} else {
