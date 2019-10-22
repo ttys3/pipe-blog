@@ -74,7 +74,7 @@ func main() {
 
 	handleSignal(server)
 
-	logger.Infof("Pipe (v%s) is running [%s]", model.Version, model.Conf.Server)
+	logger.Infof("NanoBlog (v%s) is running [%s]", model.Version, model.Conf.Server)
 	if err := server.ListenAndServe(); nil != err {
 		logger.Fatalf("listen and serve failed: " + err.Error())
 	}
