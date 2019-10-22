@@ -49,9 +49,9 @@ func ConnectDB() {
 		logger.Fatalf("opens database failed: " + err.Error())
 	}
 	if useSQLite {
-		logger.Debug("used [SQLite] as underlying database")
+		logger.Infof("used [SQLite] as underlying database")
 	} else {
-		logger.Debug("used [MySQL] as underlying database")
+		logger.Infof("used [MySQL] as underlying database")
 	}
 
 	if err = db.AutoMigrate(model.Models...).Error; nil != err {

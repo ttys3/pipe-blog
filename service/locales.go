@@ -51,7 +51,7 @@ func LoadI18n() {
 		load(loc)
 	}
 
-	logger.Tracef("loaded [%d] language configuration files", len(locales))
+	logger.Infof("LoadI18n() success: loaded %d language files", len(locales))
 }
 
 func load(localeStr string) {

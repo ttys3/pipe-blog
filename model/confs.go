@@ -210,5 +210,6 @@ func LoadConf() {
 		os.Exit(0)
 	}
 
+	logger.Infof("LoadConf() success")
 	logger.Debugf("configurations [%#v]", Conf)
 }

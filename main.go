@@ -58,6 +58,7 @@ func init() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	gin.DefaultWriter = io.MultiWriter(os.Stdout)
+	logger.Infof("main.init() done")
 }
 
 // Entry point.
@@ -144,4 +145,5 @@ func replaceServerConf() {
 			logger.Fatal("replace server conf in [theme] failed: " + err.Error())
 		}
 	}
+	logger.Infof("replaceServerConf() success")
 }

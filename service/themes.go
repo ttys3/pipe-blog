@@ -46,5 +46,5 @@ func LoadThemes() {
 		Themes = append(Themes, name)
 	}
 
-	logger.Debugf("loaded [%d] themes", len(Themes))
+	logger.Infof("LoadThemes() success: loaded %d themes", len(Themes))
 }
