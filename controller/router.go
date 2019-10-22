@@ -90,6 +90,7 @@ func MapRoutes() *gin.Engine {
 		util.PathCategories: showCategoriesAction,
 		util.PathTags: showTagsAction,
 		util.PathAtom: outputAtomAction,
+		util.PathFeed: outputAtomAction,
 		util.PathRSS: outputRSSAction,
 		util.PathSearch: searchAction,
 		util.PathOpensearch: showOpensearchAction,

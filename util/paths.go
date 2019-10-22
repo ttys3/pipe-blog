@@ -41,6 +41,7 @@ const (
 	PathTags           = "/tags"
 	PathComments       = "/comments"
 	PathAtom           = "/atom"
+	PathFeed           = "/feed"
 	PathRSS            = "/rss"
 	PathSitemap        = "/sitemap.xml"
 	PathChangelogs     = "/changelogs"
@@ -52,8 +53,8 @@ const (
 )
 
 var reservedPaths = []string{
-	PathSearch, PathOpensearch, PathBlogs, PathConsoleDist, PathAdmin, PathAPI, PathFavicon, PathTheme,
-	PathActivities, PathArchives, PathAuthors, PathCategories, PathTags, PathComments, PathAtom, PathRSS,
+	PathSearch, PathOpensearch, PathBlogs, PathConsoleDist, PathAdmin, PathAPI, PathFavicon, PathTheme, PathPost,
+	PathActivities, PathArchives, PathAuthors, PathCategories, PathTags, PathComments, PathAtom, PathRSS, PathFeed,
 	PathSitemap, PathChangelogs, PathRobots, PathAPIsSymArticle,
 	PathAPIsSymComment, PathPlatInfo,
 }
