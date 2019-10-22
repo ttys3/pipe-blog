@@ -210,21 +210,21 @@ func initBlogAdmin(tx *gorm.DB, admin *model.User, blogID uint64) error {
 func helloWorld(tx *gorm.DB, admin *model.User, blogID uint64) error {
 	content := `![Hello](` + util.ImageSize(util.RandImage(), 768, 432) + `)
 
-Pipe 博客平台已经初始化完毕，可在管理后台 - 设置 - 基础设置中调整更多细节。如果需要导入已有博客文章，请参考文档 [Hexo/Jekyll/Markdown 文件导入](https://hacpai.com/article/1498490209748)。
+NanoBlog 博客已经初始化完毕。
 
-另外，出于安全考虑请尽快完成如下操作：
+请修改昵称和默认密码: 管理后台 - 设置 - [账号](/admin/settings/profile)。
 
-1. 使用 GitHub 账号登录[社区](https://hacpai.com)
-2. 在社区[个人设置 - B3](https://hacpai.com/settings/b3) 中更新 B3 Key
-3. 在 Pipe 管理后台 - 设置 - 账号中也进行同样的 B3 Key 更新
+可在管理后台 - 设置 - 基础设置 中调整更多细节。
 
-最后，如果你觉得 Pipe 很赞，请到[项目主页](https://github.com/b3log/pipe)给颗星鼓励一下 :heart:`
+如果需要导入已有博客文章，请参考文档 [Hexo/Jekyll/Markdown 文件导入](https://hacpai.com/article/1498490209748)。
+
+此博客系统基于 [pipe](https://github.com/b3log/pipe) :heart:`
 
 	now := time.Now()
 	article := &model.Article{
 		AuthorID:     admin.ID,
 		Title:        "世界，你好！",
-		Tags:         "Pipe",
+		Tags:         "NanoDM",
 		Content:      content,
 		Path:         "/hello-world",
 		Status:       model.ArticleStatusOK,
@@ -316,14 +316,14 @@ func initBasicSettings(tx *gorm.DB, blogAdmin *model.User, blogID uint64) error 
 	if err := tx.Create(&model.Setting{
 		Category: model.SettingCategoryBasic,
 		Name:     model.SettingNameBasicBlogSubtitle,
-		Value:    "记录精彩的程序人生",
+		Value:    "记录精彩的人生",
 		BlogID:   blogID}).Error; nil != err {
 		return err
 	}
 	if err := tx.Create(&model.Setting{
 		Category: model.SettingCategoryBasic,
 		Name:     model.SettingNameBasicBlogTitle,
-		Value:    blogAdmin.Name + " 的博客",
+		Value:    blogAdmin.Nickname + " 的博客",
 		BlogID:   blogID}).Error; nil != err {
 		return err
 	}
@@ -351,14 +351,14 @@ func initBasicSettings(tx *gorm.DB, blogAdmin *model.User, blogID uint64) error 
 	if err := tx.Create(&model.Setting{
 		Category: model.SettingCategoryBasic,
 		Name:     model.SettingNameBasicMetaDescription,
-		Value:    "小而美的 golang 博客平台",
+		Value:    "小巧的个人博客系统",
 		BlogID:   blogID}).Error; nil != err {
 		return err
 	}
 	if err := tx.Create(&model.Setting{
 		Category: model.SettingCategoryBasic,
 		Name:     model.SettingNameBasicMetaKeywords,
-		Value:    "Pipe,golang,博客,开源",
+		Value:    "NanoBlog, 个人博客系统, 小钢炮",
 		BlogID:   blogID}).Error; nil != err {
 		return err
 	}

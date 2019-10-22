@@ -61,6 +61,7 @@ func loginAction(c *gin.Context) {
 	if !service.Init.Inited() {
 		user := &model.User{
 			Name:      "admin",
+			Nickname:  "请修改昵称",
 			AvatarURL: DftAvatarURl,
 			B3Key:     "",
 			GithubId:  "",

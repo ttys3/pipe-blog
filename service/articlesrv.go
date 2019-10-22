@@ -353,7 +353,7 @@ func (srv *articleService) ConsolePushArticle(article *model.Article) {
 		"article": map[string]interface{}{
 			"id":        article.ID,
 			"title":     article.Title,
-			"permalink": article.Path,
+			"permalink": util.PathPost + article.Path,
 			"tags":      article.Tags,
 			"content":   article.Content,
 		},

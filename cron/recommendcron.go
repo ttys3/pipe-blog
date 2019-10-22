@@ -67,7 +67,7 @@ func refreshRecommendArticles() {
 		}
 		themeArticle := &model.ThemeArticle{
 			Title:        article.Title,
-			URL:          blogURL + article.Path,
+			URL:          blogURL + util.PathPost + article.Path,
 			CreatedAt:    humanize.Time(article.CreatedAt),
 			Author:       author,
 			CommentCount: article.CommentCount,
