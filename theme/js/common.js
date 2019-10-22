@@ -7,7 +7,28 @@
 
 import $ from 'jquery'
 import NProgress from 'nprogress'
+import MiniLightbox from 'mini-lightbox'
 import pjax from './lib/pjax'
+
+MiniLightbox.customClose = function (self) {
+  self.img.classList.add("animated", "fadeOutDown");
+  setTimeout(function () {
+    self.box.classList.add("animated", "fadeOut");
+    setTimeout(function () {
+      self.box.classList.remove("animated", "fadeOut");
+      self.img.classList.remove("animated", "fadeOutDown");
+      self.box.style.display = "none";
+      self.opened = false;
+    }, 500);
+  }, 500);
+  return false;
+};
+
+
+MiniLightbox.customOpen = function (self) {
+  self.box.classList.add("animated", "fadeIn");
+  self.img.classList.add("animated", "fadeInUp");
+};
 
 export const ParseHljs = () => {
   Vditor.highlightRender('github', false, document)
@@ -28,40 +49,16 @@ export const ParseMarkdown = () => {
  * @description 图片预览
  */
 export const PreviewImg = () => {
-  const _previewImg = (it) => {
-    const $it = $(it)
-    var top = it.offsetTop,
-      left = it.offsetLeft
-
-    $('body').
-      append('<div class="pipe-preview__img" onclick="this.remove()"><img style="transform: translate3d(' +
-        Math.max(0, left) + 'px, ' +
-        Math.max(0, (top - $(window).scrollTop())) + 'px, 0)" src="' +
-        ($it.attr('src').split('?imageView2')[0]) + '"></div>')
-
-    $('.pipe-preview__img').css({
-      'background-color': '#fff',
-      'position': 'fixed',
-    })
-
-    $('.pipe-preview__img img')[0].onload = function () {
-      const $previewImage = $('.pipe-preview__img')
-      $previewImage.find('img').css('transform', 'translate3d(' +
-        (Math.max(0, $(window).width() - $previewImage.find('img').width()) /
-          2) + 'px, ' +
-        (Math.max(0, $(window).height() - $previewImage.find('img').height()) /
-          2) + 'px, 0)')
-
-      // fixed chrome render transform bug
-      setTimeout(function () {
-        $previewImage.width($(window).width())
-      }, 300)
-    }
-  }
+  // console.log(document.querySelectorAll('#articleContent img'))
+  new MiniLightbox({
+    selector: "#articleContent img"
+    // the common container where the images are appended
+    , delegation: "body"
+  });
   // init
-  $('body').on('click', '.vditor-reset img', function () {
-    _previewImg(this)
-  })
+  // $('body').on('click', '.vditor-reset img', function (e) {
+  //   console.log("e: %o, this: %o", e, this)
+  // })
 }
 
 /**
