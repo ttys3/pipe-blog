@@ -41,6 +41,8 @@ crossbuild: prep ui-admin ui-theme
 	cp -r ./i18n ./release/
 	cp ./storage/.gitignore ./release/storage/
 	cp pipe.json ./release/pipe.json
+	sed -i 's/"RuntimeMode": "dev",/"RuntimeMode": "release",/' ./release/pipe.json
+	sed -i 's/"LogLevel": "debug",/"LogLevel": "info",/' ./release/pipe.json
 	$(call colorecho,"begin generate md5sum ...")
 	md5sum ./release/$(APP_NAME)_* > ./release/$(APP_NAME).md5sum.txt
 	ls -lhp ./release
