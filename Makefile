@@ -65,5 +65,5 @@ dev:
 clean:
 	rm -f ./$(APP_NAME)
 	rm -rf ./console/dist
-	rm -rf ./theme/dist
 	rm -rf ./release
+	find ./theme -type f -name "*.min.*" ! -path './node_modules/*' | xargs rm -f
