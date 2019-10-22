@@ -52,5 +52,4 @@ func UploadAction(c *gin.Context) {
 	}
 	result.Code = util.CodeOk
 	result.Msg =  fmt.Sprintf("uploaded successfully %d files", len(files))
-	return
 }
