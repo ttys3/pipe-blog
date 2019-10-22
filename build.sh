@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cd console && yarn install && yarn run build
-cd ../theme && yarn install && yarn run build
-
-GOPROXY=https://goproxy.cn,direct go build -i -v
-
+SRC_DIR=$(pwd)
+cd console && yarn install && yarn run build && cd "${SRC_DIR}" && \
+cd theme && yarn install && yarn run build && cd "${SRC_DIR}" && \
+GOPROXY=https://goproxy.cn,direct go build -i -v . && \
 echo 'build pipe done'
