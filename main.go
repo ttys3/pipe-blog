@@ -47,6 +47,13 @@ func init() {
 	gulu.Log.SetLevel("warn")
 	logger = gulu.Log.NewLogger(os.Stdout)
 
+	// chdir before open file, otherwise both LoadI18n() and LoadThemes() will fail to work
+	if exeDir, err := os.Executable(); err != nil {
+		panic(err)
+	} else if err := os.Chdir(filepath.Dir(exeDir)); err != nil {
+		panic(err)
+	}
+
 	model.LoadConf()
 	service.LoadI18n()
 	service.LoadThemes()
