@@ -42,20 +42,17 @@
         v-for="item in list" :key="item.id" class="fn__flex">
         <a class="avatar avatar--mid avatar--space pipe-tooltipped pipe-tooltipped--s"
            :aria-label="item.author.name"
-           @click.stop="openURL(item.author.url)"
-           href="javascript:void(0)"
+           :href="item.author.url"
            :style="`background-image: url(${item.author.avatarURL})`"></a>
         <div class="fn__flex-1">
           <div class="fn__flex">
             <div class="fn__flex-1">
-              <a @click.stop="openURL(item.url)"
-                 href="javascript:void(0)"
+              <a :href="item.url"
                  class="list__title">
                 {{ item.title }}
               </a>
               <small class="fn-nowrap" v-if="userCount > 1">
-                By <a @click.stop="openURL(item.articleAuthor.url)"
-                      href="javascript:void(0)">{{ item.articleAuthor.name }}</a>
+                By <a :href="item.articleAuthor.url">{{ item.articleAuthor.name }}</a>
               </small>
             </div>
             <div>
@@ -120,9 +117,6 @@
       }
     },
     methods: {
-      openURL (url) {
-        window.location.href = url
-      },
       selectAll () {
         this.$set(this, 'isSelectAll', !this.isSelectAll)
         if (!this.isSelectAll) {

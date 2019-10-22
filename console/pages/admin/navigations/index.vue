@@ -9,14 +9,12 @@
       <ul class="list" v-if="list.length > 0">
         <li v-for="item in list" :key="item.id" class="fn__flex">
           <a class="avatar avatar--mid avatar--space"
-             @click.stop="openURL(item.url)"
-             href="javascript:void(0)"
+             :href="item.url"
              :style="`background-image: url(${item.iconURL})`"></a>
           <div class="fn__flex-1">
             <div class="fn__flex">
               <a target="_blank" class="list__title fn__flex-1"
-                 @click.stop="openURL(item.url)"
-                 href="javascript:void(0)">
+                 :href="item.url">
                 {{ item.title }}
               </a>
               <v-menu
@@ -86,9 +84,6 @@
       }
     },
     methods: {
-      openURL (url) {
-        window.location.href = url
-      },
       getOpenMethodName (openMethod) {
         let openMethodName = this.$t('openMethod1', this.$store.state.locale)
         switch (openMethod) {

@@ -9,8 +9,7 @@
         <div class="fn__flex-1">
           <div class="fn__flex">
             <a class="list__title fn__flex-1"
-               @click.stop="openURL(item.url)"
-               href="javascript:void(0)">
+               :href="item.url">
               {{ item.title }}
             </a>
             <v-menu
@@ -79,9 +78,6 @@
       }
     },
     methods: {
-      openURL (url) {
-        window.location.href = url
-      },
       async getList (currentPage = 1) {
         const responseData = await this.axios.get(`/console/categories?p=${currentPage}`)
         if (responseData) {
