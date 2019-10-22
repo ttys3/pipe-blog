@@ -20,5 +20,14 @@ go.sum
 /theme/sw.min.js
 /theme/sw.min.js.tpl
 
+/theme/x/9IPHP/js/common.min.js
+/theme/x/Fara/js/common.min.js
+/theme/x/Gina/js/common.min.js
+/theme/x/Koma/js/common.min.js
+/theme/x/Littlewin/js/common.min.js
+/theme/x/Medium/js/common.min.js
+/theme/x/Next/js/common.min.js
+
+
 # IDE
 .idea/
