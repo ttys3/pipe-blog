@@ -7,7 +7,7 @@
         <div class="fn__right">
           <nuxt-link to="/">{{ $t('index', $store.state.locale)}}</nuxt-link>
           |
-          <a href="https://hacpai.com">{{ $t('hacpai', $store.state.locale)}}</a>
+          <a href="https://nanodm.net">NanoDM</a>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
   export default {
     head () {
       return {
-        title: '404 - Pipe'
+        title: '404 - NanoBlog'
       }
     },
     mounted () {

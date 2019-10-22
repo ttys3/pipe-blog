@@ -220,7 +220,7 @@ const addCopyright = () => {
       '',
       `作者：${author}`,
       `链接：${link}`,
-      '来源：Pipe',
+      '来源：NanoBlog',
       '著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。',
     ]
   }
@@ -231,7 +231,7 @@ const addCopyright = () => {
     }
 
     let selectionObj = window.getSelection()
-    const author = $(this).data('author') || 'Pipe'
+    const author = $(this).data('author') || 'NanoBlog'
     let link = $(this).data('link') || location.href
 
     if (selectionObj.toString().length < 128) {

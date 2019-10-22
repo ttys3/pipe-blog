@@ -3,7 +3,7 @@
     <div :class="$route.path.indexOf('/admin') > -1 ? 'header__logo' : 'header__logo header__logo--theme'">
       <a :href="$store.state.blogURL || '/'">
         <img class="header__logo-img" src="~assets/images/logo.png"/>
-        {{ $store.state.blogTitle || 'Pipe' }}
+        {{ $store.state.blogTitle || 'NanoBlog' }}
       </a>
     </div>
     <div class="header__nav fn__flex-1 fn__flex">

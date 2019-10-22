@@ -2,7 +2,10 @@
   <div class="console" id="particles">
     <div class="card login__content" ref="content">
       <form action="" class="login__form">
-
+        <p class="first-login-tips" v-if="isFirstLogin">
+          default username: <code>admin</code>
+          default password: <code>admin</code>
+        </p>
         <label for="username" class="login__label">username
         <input type="text" class="login__input" name="username" id="username" v-model="username" v-on:keyup.enter="login"/>
         </label>
@@ -24,27 +27,22 @@
   export default {
     data () {
       return {
+        isFirstLogin: false,
         password: "",
         username: "",
       }
     },
     head () {
       return {
-        title: this.$t('welcome', this.$store.state.locale) + ' - Pipe',
+        title: this.$t('welcome', this.$store.state.locale) + ' - NanoBlog',
       }
     },
     methods: {
-      toggleIntro () {
-        this.$set(this, 'showIntro', !this.showIntro)
-      },
       async doLogin () {
         const responseData = await this.axios.post(`/login`, {
           username: this.username,
           password: this.password,
         })
-        if (responseData) {
-          console.log(responseData)
-        }
         return responseData
       },
       async login (event) {
@@ -56,7 +54,7 @@
         })
         try {
           const rs = await this.doLogin()
-          console.log('rs: %o', rs)
+          // console.log('rs: %o', rs)
           if (rs.code === 0) {
             this.$store.commit('setSnackBar', {
               snackBar: true,
@@ -82,6 +80,9 @@
         window.location.href = "/admin/"
         this.$router.push('/admin/')
         return
+      }
+      if (this.$store.state.isInit === false) {
+        this.isFirstLogin = true
       }
       initParticlesJS('particles')
     },

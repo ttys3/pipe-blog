@@ -41,7 +41,7 @@ var Version = "1.8.9"
 var Conf *Configuration
 
 // UserAgent represents HTTP client user agent.
-var UserAgent = "Pipe/" + Version + "; +https://github.com/b3log/pipe"
+var UserAgent = "NanoBlog/" + Version + "; +https://github.com/ttys3/nanoblog"
 
 // Models represents all models..
 var Models = []interface{}{
