@@ -80,7 +80,7 @@ type Configuration struct {
 // LoadConf loads the configurations. Command-line arguments will override configuration file.
 func LoadConf() {
 	version := flag.Bool("version", false, "prints current pipe version")
-	confPath := flag.String("conf", "nanoblog.toml", "path of nanoblog.toml")
+	confPath := flag.String("c", "nanoblog.toml", "path of nanoblog.toml")
 	confStorage := flag.String("storage", "./storage", "path to storage dir")
 	confServer := flag.String("server", "", "this will override Conf.Server if specified")
 	confStaticServer := flag.String("static_server", "", "this will override Conf.StaticServer if specified")
@@ -106,7 +106,7 @@ func LoadConf() {
 
 	bytes, err := ioutil.ReadFile(*confPath)
 	if nil != err {
-		logger.Fatal("loads configuration file [" + *confPath + "] failed: " + err.Error())
+		logger.Fatal("load configuration file [" + *confPath + "] failed: " + err.Error())
 	}
 
 	Conf = &Configuration{}
@@ -210,6 +210,6 @@ func LoadConf() {
 		os.Exit(0)
 	}
 
-	logger.Infof("LoadConf() success")
+	logger.Infof("LoadConf() success, loaded config file: %s", *confPath)
 	logger.Debugf("configurations [%#v]", Conf)
 }
