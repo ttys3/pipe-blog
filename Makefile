@@ -2,7 +2,7 @@
 # author: 荒野无灯
 # date: 2019-10-22
 
-APP_NAME := pipe
+APP_NAME := nanoblog
 GOPROXY := https://goproxy.cn,direct
 # go-sqlite3 requires cgo to work. This is a stub
 CGO_ENABLED := 1
@@ -32,9 +32,9 @@ docker: prep ui-admin ui-theme
 	mkdir -p ./release/i18n
 	mkdir -p ./release/storage
 	$(call colorecho,"begin build release binary ...")
-	cd ./release/ && GO111MODULE=on CGO_ENABLED=$(CGO_ENABLED) go build -ldflags "-s -w $(AUTO_VERSIONING)" ../
+	cd ./release/ && GO111MODULE=on CGO_ENABLED=$(CGO_ENABLED) go build -o "$(APP_NAME)" -ldflags "-s -w $(AUTO_VERSIONING)" ../
 	$(call colorecho,"begin compress binary with upx ...")
-	upx ./release/$(APP_NAME)_*
+	upx ./release/$(APP_NAME)
 	cp -r ./console/dist ./release/console/
 	rsync -aqP --exclude=node_modules --exclude='*.scss' --exclude=gulpfile.js --exclude=.idea --exclude=package.json ./theme/ ./release/theme
 	rm -rf ./release/theme/js
@@ -45,18 +45,18 @@ docker: prep ui-admin ui-theme
 	sed -i 's/"RuntimeMode": "dev",/"RuntimeMode": "release",/' ./release/pipe.json
 	sed -i 's/"LogLevel": "debug",/"LogLevel": "info",/' ./release/pipe.json
 	$(call colorecho,"begin generate md5sum ...")
-	md5sum ./release/$(APP_NAME)_* > ./release/$(APP_NAME).md5sum.txt
+	md5sum ./release/$(APP_NAME) > ./release/$(APP_NAME).md5sum.txt
 	ls -lhp ./release
 	$(call colorecho,"done.")
 
 debug:
-	GOPROXY=$(GOPROXY) go build -i -v .
+	GOPROXY=$(GOPROXY) go build -o "$(APP_NAME)" -i -v .
 
 win:
-	GO111MODULE=on CGO_ENABLED=1 go build -ldflags "-s -w $(AUTO_VERSIONING)"
+	GO111MODULE=on CGO_ENABLED=1 go build -o "$(APP_NAME)" -ldflags "-s -w $(AUTO_VERSIONING)"
 
 linux:
-	GOPROXY=$(GOPROXY) go build -i -ldflags "-s -w $(AUTO_VERSIONING)" .
+	GOPROXY=$(GOPROXY) go build -o "$(APP_NAME)" -i -ldflags "-s -w $(AUTO_VERSIONING)" .
 
 ui-admin:
 	cd console && yarn install && yarn run build

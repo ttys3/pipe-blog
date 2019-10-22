@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm -rf ./pipe && GOPROXY=https://goproxy.cn,direct go build -i -v && ./pipe
+rm -rf ./nanoblog && GOPROXY=https://goproxy.cn,direct go build -o nanoblog -i -v && ./nanoblog
