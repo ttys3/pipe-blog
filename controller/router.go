@@ -70,10 +70,10 @@ func MapRoutes() *gin.Engine {
 	store.Options(sessions.Options{
 		Path:     "/",
 		MaxAge:   model.Conf.SessionMaxAge,
-		Secure:   strings.HasPrefix(model.Conf.Server, "https"),
+		Secure:   model.Conf.SSL,
 		HttpOnly: true,
 	})
-	ret.Use(sessions.Sessions("pipe", store))
+	ret.Use(sessions.Sessions("nanodm", store))
 	ret.GET(util.PathPlatInfo, showPlatInfoAction)
 	ret.GET(util.PathSitemap, outputSitemapAction)
 	// Set a lower memory limit for multipart forms (default is 32 MiB)
