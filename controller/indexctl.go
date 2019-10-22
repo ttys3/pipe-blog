@@ -71,7 +71,7 @@ func showTopBlogsAction(c *gin.Context) {
 }
 
 func showManifestAction(c *gin.Context) {
-	data, err := ioutil.ReadFile(filepath.FromSlash("theme/js/manifest.json"))
+	data, err := ioutil.ReadFile(filepath.FromSlash("theme/manifest.json"))
 	if nil != err {
 		notFound(c)
 
