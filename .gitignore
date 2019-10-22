@@ -28,6 +28,14 @@ go.sum
 /theme/x/Medium/js/common.min.js
 /theme/x/Next/js/common.min.js
 
+/theme/x/9IPHP/css/common.css
+/theme/x/Fara/css/common.css
+/theme/x/Gina/css/common.css
+/theme/x/Koma/css/common.css
+/theme/x/Littlewin/css/common.css
+/theme/x/Medium/css/common.css
+/theme/x/Next/css/common.css
+
 
 # IDE
 .idea/
