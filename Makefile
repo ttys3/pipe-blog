@@ -36,8 +36,8 @@ crossbuild: prep ui-admin ui-theme
 	$(call colorecho,"begin compress binary with upx ...")
 	upx ./release/$(APP_NAME)_*
 	cp -r ./console/dist ./release/console/
-	rsync -aqP --exclude=node_modules --exclude=scss --exclude=gulpfile.js  --exclude=package.json ./theme/ ./release/theme
-	cp -r ./i18 ./release/
+	rsync -aqP --exclude=node_modules --exclude=.scss --exclude=gulpfile.js  --exclude=package.json ./theme/ ./release/theme
+	cp -r ./i18n ./release/
 	cp pipe.json ./release/pipe.json
 	$(call colorecho,"begin generate md5sum ...")
 	md5sum ./release/$(APP_NAME)_* > ./release/$(APP_NAME).md5sum.txt
