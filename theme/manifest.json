@@ -1,12 +1,12 @@
 {
-  "name": "Pipe - 小而美的博客平台",
+  "name": "NanoBlog - 小巧的个人博客",
   "short_name": "Pipe",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff",
   "orientation": "portrait",
   "theme_color": "#eef5f9",
-  "description": "小而美的博客平台，为未来而构建。通过黑客派账号登录即可使用",
+  "description": "NanoBlog个人博客系统",
   "icons": [
     {
       "src": "{server}/theme/images/logo@48.png",
