@@ -30,14 +30,14 @@ import (
 func ShowAdminPagesAction(c *gin.Context) {
 	session := util.GetSession(c)
 	if 0 == session.UID {
-		c.Redirect(http.StatusSeeOther, model.Conf.Server+"/start")
+		c.Redirect(http.StatusSeeOther, model.Conf.Server+"/login")
 
 		return
 	}
 
-	t, err := template.ParseFiles(filepath.Join("console/dist/admin" + c.Param("path") + "/index.html"))
+	t, err := template.ParseFiles(filepath.Join("console/dist/admin" + c.Param("adminpath") + "/index.html"))
 	if nil != err {
-		logger.Errorf("load console page [" + c.Param("path") + "] failed: " + err.Error())
+		logger.Errorf("load console page [" + c.Param("adminpath") + "] failed: " + err.Error())
 		c.String(http.StatusNotFound, "load console page failed")
 
 		return

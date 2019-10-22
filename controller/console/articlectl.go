@@ -264,7 +264,7 @@ func GetArticlesAction(c *gin.Context) {
 			CreatedAt:    articleModel.CreatedAt.Format("2006-01-02"),
 			Title:        articleModel.Title,
 			Tags:         consoleTags,
-			URL:          blogURLSetting.Value + articleModel.Path,
+			URL:          blogURLSetting.Value + util.PathPost + articleModel.Path,
 			Topped:       articleModel.Topped,
 			ViewCount:    articleModel.ViewCount,
 			CommentCount: articleModel.CommentCount,

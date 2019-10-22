@@ -79,6 +79,49 @@ func MapRoutes() *gin.Engine {
 	// Set a lower memory limit for multipart forms (default is 32 MiB)
 	ret.MaxMultipartMemory = 8 << 20 // 8 MiB
 
+	//themeGroup := ret.Group(util.PathRoot + "/:username")
+	themeGroup := ret.Group(util.PathRoot)
+	themeGroup.Use(fillUser, pjax, resolveBlog)
+	themeGroup.GET("", showArticlesAction)
+	blogGetRoutes := map[string]func (*gin.Context){
+		util.PathActivities: showActivitiesAction,
+		util.PathArchives: showArchivesAction,
+		util.PathAuthors: showAuthorsAction,
+		util.PathCategories: showCategoriesAction,
+		util.PathTags: showTagsAction,
+		util.PathAtom: outputAtomAction,
+		util.PathRSS: outputRSSAction,
+		util.PathSearch: searchAction,
+		util.PathOpensearch: showOpensearchAction,
+		util.PathManifest: showManifestAction,
+		util.PathPost+"/*slug": showArticleAction,
+		util.PathArchives+"/*archive": showArchiveArticlesAction,
+		util.PathAuthors+"/*author": showAuthorArticlesAction,
+		util.PathCategories+"/*category": showCategoryArticlesArticlesAction,
+		util.PathTags+"/*tag": showTagArticlesAction,
+		util.PathComments+"/*comment": getRepliesAction,
+	}
+	for p, action := range blogGetRoutes {
+		themeGroup.GET(p, action)
+	}
+
+	blogPostRoutes := map[string]func (*gin.Context){
+		"/api/markdown": console.MarkdownAction,
+		util.PathComments: addCommentAction,
+		util.PathAPIsSymComment: addSymCommentAction,
+		util.PathAPIsSymArticle: addSymArticleAction,
+	}
+	for p, action := range blogPostRoutes {
+		themeGroup.POST(p, action)
+	}
+
+	themeGroup.DELETE(util.PathComments+"/*comment", func(c *gin.Context) {
+		commentID := strings.Split(c.Request.RequestURI, util.PathComments+"/")[1]
+		c.Params = append(c.Params, gin.Param{Key: "id", Value: commentID})
+		console.RemoveCommentAction(c)
+	})
+	//themeGroup.Any("/post/*path", routePath)
+
 	api := ret.Group(util.PathAPI)
 	api.POST("/logout", logoutAction)
 	api.POST("/login", loginAction)
@@ -147,11 +190,11 @@ func MapRoutes() *gin.Engine {
 	consoleSettingsGroup.PUT("/third-stat", console.UpdateThirdStatisticSettingsAction)
 	consoleSettingsGroup.GET("/ad", console.GetAdSettingsAction)
 	consoleSettingsGroup.PUT("/ad", console.UpdateAdSettingsAction)
-	consoleSettingsGroup.GET("/account", console.GetAccountAction)
-	consoleSettingsGroup.PUT("/account", console.UpdateAccountAction)
+	consoleSettingsGroup.GET("/profile", console.GetAccountAction)
+	consoleSettingsGroup.PUT("/profile", console.UpdateAccountAction)
 
-	ret.StaticFile(util.PathFavicon, "console/static/favicon.ico")
-	ret.StaticFile(util.PathManifest, "console/static/manifest.json")
+	consoleGroup.StaticFile(util.PathFavicon, "console/static/favicon.ico")
+	consoleGroup.StaticFile(util.PathManifest, "console/static/manifest.json")
 
 	ret.Static(util.PathTheme+"/scss", "theme/scss")
 	ret.Static(util.PathTheme+"/js", "theme/js")
@@ -182,19 +225,15 @@ func MapRoutes() *gin.Engine {
 	templates := append(themeTemplates, commentTemplates...)
 	templates = append(templates, headTemplates...)
 	ret.LoadHTMLFiles(templates...)
-	themeGroup := ret.Group(util.PathBlogs + "/:username")
-	themeGroup.Use(fillUser, pjax, resolveBlog)
-	themeGroup.GET("", showArticlesAction)
-	themeGroup.Any("/*path", routePath)
 
 	adminPagesGroup := ret.Group(util.PathAdmin)
 	adminPagesGroup.Use(fillUser)
 	adminPagesGroup.GET("", console.ShowAdminPagesAction)
-	adminPagesGroup.GET("/*path", console.ShowAdminPagesAction)
+	adminPagesGroup.GET("/*adminpath", console.ShowAdminPagesAction)
 
-	indexGroup := ret.Group("")
-	indexGroup.Use(fillUser)
-	indexGroup.GET("", showIndexAction)
+	//indexGroup := ret.Group("")
+	//indexGroup.Use(fillUser)
+	//indexGroup.GET("", showIndexAction)
 
 	initGroup := ret.Group(util.PathInit)
 	initGroup.Use(fillUser)
@@ -212,6 +251,7 @@ func MapRoutes() *gin.Engine {
 
 func routePath(c *gin.Context) {
 	path := c.Param("path")
+	logger.Debugf("path: %s", path)
 
 	switch path {
 	case util.PathActivities:

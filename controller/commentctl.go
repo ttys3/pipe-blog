@@ -117,7 +117,7 @@ func addCommentAction(c *gin.Context) {
 	themeComment := &model.ThemeComment{
 		ID:        comment.ID,
 		Content:   template.HTML(util.Markdown(comment.Content).ContentHTML),
-		URL:       getBlogURL(c) + article.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(comment.ID)),
+		URL:       getBlogURL(c) + util.PathPost + article.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(comment.ID)),
 		Author:    author,
 		CreatedAt: comment.CreatedAt.Format("2006-01-02"),
 		Removable: false,

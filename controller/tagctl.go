@@ -113,7 +113,7 @@ func showTagArticlesAction(c *gin.Context) {
 			CreatedAtDay:   articleModel.CreatedAt.Format("02"),
 			Title:          pangu.SpacingText(articleModel.Title),
 			Tags:           themeTags,
-			URL:            getBlogURL(c) + articleModel.Path,
+			URL:            getBlogURL(c) + util.PathPost + articleModel.Path,
 			Topped:         articleModel.Topped,
 			ViewCount:      articleModel.ViewCount,
 			CommentCount:   articleModel.CommentCount,

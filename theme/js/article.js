@@ -75,7 +75,7 @@ export const InitToc = (
 export const ShowEditor = (reply, id, commentId) => {
   const $editor = $('#pipeEditor')
   if ($editor.length === 0) {
-    location.href = `${$('#pipeLang').data('server')}/start`
+    location.href = `${$('#pipeLang').data('server')}/login`
     return
   }
   if (commentId) {

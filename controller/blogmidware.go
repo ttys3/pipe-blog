@@ -53,21 +53,21 @@ func fillUser(c *gin.Context) {
 }
 
 func resolveBlog(c *gin.Context) {
-	username := c.Param("username")
-	if "" == username {
-		notFound(c)
-		c.Abort()
-
-		return
-	}
-	user := service.User.GetUserByName(username)
-	if nil == user {
-		notFound(c)
-		c.Abort()
-
-		return
-	}
-	userBlog := service.User.GetOwnBlog(user.ID)
+	//username := c.Param("username")
+	//if "" == username {
+	//	notFound(c)
+	//	c.Abort()
+	//
+	//	return
+	//}
+	//user := service.User.GetUserByName(username)
+	//if nil == user {
+	//	notFound(c)
+	//	c.Abort()
+	//
+	//	return
+	//}
+	userBlog := service.User.GetOwnBlog(1)
 	if nil == userBlog {
 		notFound(c)
 		c.Abort()
@@ -79,8 +79,12 @@ func resolveBlog(c *gin.Context) {
 	fillCommon(c)
 	go service.Statistic.IncViewCount(userBlog.ID)
 
-	path := strings.Split(c.Request.RequestURI, username)[1]
+	path := c.Request.RequestURI
+	if strings.Contains(c.Request.RequestURI, "post") {
+		path = strings.Split(path, "post")[1]
+	}
 	path = strings.TrimSpace(path)
+	//logger.Debugf("resolveBlog(): c.Request.RequestURI: %s, post: %s", c.Request.RequestURI, path)
 	if end := strings.Index(path, "?"); 0 < end {
 		path = path[:end]
 	}
@@ -133,6 +137,7 @@ func fillCommon(c *gin.Context) {
 		settingMap[strings.Title(setting.Name)] = v
 		settingMap[setting.Name] = v
 	}
+	//logger.Debugf("fillCommon(): settingMap: %#v", settingMap)
 	settingMap[strings.Title(model.SettingNameBasicHeader)] = template.HTML(settingMap[model.SettingNameBasicHeader].(string))
 	settingMap[strings.Title(model.SettingNameBasicFooter)] = template.HTML(settingMap[model.SettingNameBasicFooter].(string))
 	settingMap[strings.Title(model.SettingNameBasicNoticeBoard)] = template.HTML(settingMap[model.SettingNameBasicNoticeBoard].(string))
@@ -149,6 +154,7 @@ func fillCommon(c *gin.Context) {
 		statisticMap[strings.Title(statistic.Name)] = count
 		statisticMap[statistic.Name] = count
 	}
+
 	(*dataModel)["Statistic"] = statisticMap
 	(*dataModel)["FaviconURL"] = settingMap[model.SettingNameBasicFaviconURL]
 	(*dataModel)["LogoURL"] = settingMap[model.SettingNameBasicLogoURL]
@@ -227,7 +233,7 @@ func fillMostViewArticles(c *gin.Context, settingMap *map[string]interface{}, da
 		}
 		themeArticle := &model.ThemeArticle{
 			Title:     article.Title,
-			URL:       (*settingMap)[model.SettingNameBasicBlogURL].(string) + article.Path,
+			URL:       (*settingMap)[model.SettingNameBasicBlogURL].(string) + util.PathPost + article.Path,
 			CreatedAt: humanize.Time(article.CreatedAt),
 			Author:    author,
 		}
@@ -269,7 +275,7 @@ func fillRecentComments(c *gin.Context, settingMap *map[string]interface{}, data
 		}
 		themeComment := &model.ThemeComment{
 			Title:     title,
-			URL:       getBlogURL(c) + article.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(comment.ID)),
+			URL:       getBlogURL(c) + util.PathPost + article.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(comment.ID)),
 			CreatedAt: humanize.Time(comment.CreatedAt),
 			Author:    author,
 		}
@@ -302,7 +308,7 @@ func fillMostCommentArticles(c *gin.Context, settingMap *map[string]interface{},
 		}
 		themeArticle := &model.ThemeArticle{
 			Title:     article.Title,
-			URL:       (*settingMap)[model.SettingNameBasicBlogURL].(string) + article.Path,
+			URL:       (*settingMap)[model.SettingNameBasicBlogURL].(string) + util.PathPost + article.Path,
 			CreatedAt: humanize.Time(article.CreatedAt),
 			Author:    author,
 		}
@@ -314,7 +320,6 @@ func fillMostCommentArticles(c *gin.Context, settingMap *map[string]interface{},
 
 func getBlogURL(c *gin.Context) string {
 	dataModel := getDataModel(c)
-
 	return dataModel["Setting"].(map[string]interface{})[model.SettingNameBasicBlogURL].(string)
 }
 
@@ -343,7 +348,7 @@ func getLocale(c *gin.Context) string {
 }
 
 func notFound(c *gin.Context) {
-	t, err := template.ParseFiles("console/dist/start/index.html")
+	t, err := template.ParseFiles("console/dist/login/index.html")
 	if nil != err {
 		logger.Errorf("load 404 page failed: " + err.Error())
 		c.String(http.StatusNotFound, "load 404 page failed")

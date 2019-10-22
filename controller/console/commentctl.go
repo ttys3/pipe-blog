@@ -69,7 +69,7 @@ func GetCommentsAction(c *gin.Context) {
 			CreatedAt:     commentModel.CreatedAt.Format("2006-01-02"),
 			Title:         article.Title,
 			Content:       template.HTML(mdResult.ContentHTML),
-			URL:           blogURLSetting.Value + article.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(commentModel.ID)),
+			URL:           blogURLSetting.Value + util.PathPost + article.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(commentModel.ID)),
 		}
 
 		comments = append(comments, comment)

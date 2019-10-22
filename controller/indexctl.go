@@ -42,7 +42,7 @@ func showIndexAction(c *gin.Context) {
 }
 
 func showStartPageAction(c *gin.Context) {
-	t, err := template.ParseFiles("console/dist/start/index.html")
+	t, err := template.ParseFiles("console/dist/login/index.html")
 	if nil != err {
 		logger.Errorf("load start page failed: " + err.Error())
 		c.String(http.StatusNotFound, "load start page failed")

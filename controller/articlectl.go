@@ -88,7 +88,7 @@ func showArticlesAction(c *gin.Context) {
 			CreatedAtDay:   articleModel.CreatedAt.Format("02"),
 			Title:          pangu.SpacingText(articleModel.Title),
 			Tags:           themeTags,
-			URL:            getBlogURL(c) + articleModel.Path,
+			URL:            getBlogURL(c) + util.PathPost +  articleModel.Path,
 			Topped:         articleModel.Topped,
 			ViewCount:      articleModel.ViewCount,
 			CommentCount:   articleModel.CommentCount,
@@ -144,7 +144,7 @@ func showArticleAction(c *gin.Context) {
 
 	authorModel := service.User.GetUser(articleModel.AuthorID)
 	articleTitle := pangu.SpacingText(articleModel.Title)
-	articleURL := getBlogURL(c) + articleModel.Path
+	articleURL := getBlogURL(c) + util.PathPost +  articleModel.Path
 	articleSignSetting := dataModel["Setting"].(map[string]interface{})[model.SettingNameArticleSign].(string)
 	articleSignSetting = strings.Replace(articleSignSetting, "{title}", articleTitle, -1)
 	articleSignSetting = strings.Replace(articleSignSetting, "{author}", authorModel.Name, -1)
@@ -197,7 +197,7 @@ func showArticleAction(c *gin.Context) {
 		comment := &model.ThemeComment{
 			ID:         commentModel.ID,
 			Content:    template.HTML(mdResult.ContentHTML),
-			URL:        getBlogURL(c) + articleModel.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(commentModel.ID)),
+			URL:        getBlogURL(c) + util.PathPost + articleModel.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(commentModel.ID)),
 			Author:     author,
 			CreatedAt:  commentModel.CreatedAt.Format("2006-01-02"),
 			Removable:  session.UID == authorModel.ID,
@@ -222,7 +222,7 @@ func showArticleAction(c *gin.Context) {
 				page := service.Comment.GetCommentPage(commentModel.ArticleID, commentModel.ID, commentModel.BlogID)
 				parentComment := &model.ThemeComment{
 					ID:     parentCommentModel.ID,
-					URL:    getBlogURL(c) + articleModel.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(parentCommentModel.ID)),
+					URL:    getBlogURL(c) + util.PathPost + articleModel.Path + "?p=" + strconv.Itoa(page) + "#pipeComment" + strconv.Itoa(int(parentCommentModel.ID)),
 					Author: parentAuthor,
 				}
 				comment.Parent = parentComment
