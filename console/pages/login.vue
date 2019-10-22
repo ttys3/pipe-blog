@@ -3,7 +3,7 @@
     <div class="card login__content" ref="content">
       <form action="" class="login__form">
         <p class="first-login-tips" v-if="isFirstLogin">
-          default username: <code>admin</code>
+          default username: <code>admin</code> <br>
           default password: <code>admin</code>
         </p>
         <label for="username" class="login__label">username
@@ -117,6 +117,14 @@
     &__label
         display: block
         margin: 2em 5em
+  .first-login-tips
+      border: #94cfe0 2px solid
+      border-radius: 3%
+      height: auto
+      width: 220px
+      margin: 0 auto
+  .first-login-tips code
+      color: #da3e3e
 
   @media (max-width: 470px)
     .login__checkbox
