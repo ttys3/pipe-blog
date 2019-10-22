@@ -18,6 +18,7 @@ package controller
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/b3log/gulu"
 	"github.com/b3log/pipe/model"
@@ -83,6 +84,13 @@ func getStatusAction(c *gin.Context) {
 			if nil != ownBlog {
 				data.BlogTitle = ownBlog.Title
 				data.BlogURL = ownBlog.URL
+				// fixup SSL
+				blogUrlTemp := ownBlog.URL
+				if model.Conf.SSL && strings.HasPrefix(blogUrlTemp, "http://") {
+					data.BlogURL = strings.Replace(blogUrlTemp, "http://", "https://", 1)
+				} else if !model.Conf.SSL && strings.HasPrefix(blogUrlTemp, "https://") {
+					data.BlogURL = strings.Replace(blogUrlTemp, "https://", "http://", 1)
+				}
 			}
 			data.Blogs = service.User.GetUserBlogs(user.ID)
 		}
