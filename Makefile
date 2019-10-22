@@ -6,7 +6,7 @@ APP_NAME := pipe
 GOPROXY := https://goproxy.cn,direct
 # go-sqlite3 requires cgo to work. This is a stub
 CGO_ENABLED := 1
-GOX_OSARCH := linux/amd64 linux/arm64 darwin/amd64 windows/amd64
+#GOX_OSARCH := linux/amd64 linux/arm64 darwin/amd64 windows/amd64
 PKG_URL := github.com/b3log/pipe/model
 APP_VERSION := $(shell cat build.version)
 AUTO_VERSIONING := -X $(PKG_URL).Version=$(APP_VERSION)
@@ -23,9 +23,8 @@ release: ui-admin ui-theme linux
 
 prep:
 	test -x "$$(command -v rice)" || GO111MODULE=on go install github.com/GeertJohan/go.rice/rice
-	test -x "$$(command -v gox)" || GO111MODULE=on go install github.com/mitchellh/gox
 
-crossbuild: prep ui-admin ui-theme
+docker: prep ui-admin ui-theme
 	$(call colorecho,"remove release dir ...")
 	rm -rf release
 	mkdir -p ./release/console
@@ -33,7 +32,7 @@ crossbuild: prep ui-admin ui-theme
 	mkdir -p ./release/i18n
 	mkdir -p ./release/storage
 	$(call colorecho,"begin build release binary ...")
-	cd ./release/ && GO111MODULE=on CGO_ENABLED=$(CGO_ENABLED) gox -osarch="$(GOX_OSARCH)" -output "$(APP_NAME)_{{.OS}}_{{.Arch}}" -ldflags "-s -w $(AUTO_VERSIONING)" ../
+	cd ./release/ && GO111MODULE=on CGO_ENABLED=$(CGO_ENABLED) go build -ldflags "-s -w $(AUTO_VERSIONING)" ../
 	$(call colorecho,"begin compress binary with upx ...")
 	upx ./release/$(APP_NAME)_*
 	cp -r ./console/dist ./release/console/
@@ -54,7 +53,7 @@ debug:
 	GOPROXY=$(GOPROXY) go build -i -v .
 
 win:
-	GO111MODULE=on CGO_ENABLED=1 gox -mod="vendor" -osarch="windows/amd64" -output "filebrowser_{{.OS}}_{{.Arch}}" -ldflags "-s -w $(AUTO_VERSIONING)"
+	GO111MODULE=on CGO_ENABLED=1 go build -ldflags "-s -w $(AUTO_VERSIONING)"
 
 linux:
 	GOPROXY=$(GOPROXY) go build -i -ldflags "-s -w $(AUTO_VERSIONING)" .
