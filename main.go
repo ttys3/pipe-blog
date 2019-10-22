@@ -33,7 +33,6 @@ import (
 
 	"github.com/b3log/pipe/controller"
 	"github.com/b3log/pipe/cron"
-	"github.com/b3log/pipe/i18n"
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 )
@@ -49,7 +48,7 @@ func init() {
 	logger = gulu.Log.NewLogger(os.Stdout)
 
 	model.LoadConf()
-	i18n.Load()
+	service.LoadI18n()
 	service.LoadThemes()
 	replaceServerConf()
 

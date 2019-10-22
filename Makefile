@@ -30,12 +30,14 @@ crossbuild: prep ui-admin ui-theme
 	rm -rf release
 	mkdir -p ./release/console
 	mkdir -p ./release/theme
+	mkdir -p ./release/i18n
 	$(call colorecho,"begin build release binary ...")
 	cd ./release/ && GO111MODULE=on CGO_ENABLED=$(CGO_ENABLED) gox -osarch="$(GOX_OSARCH)" -output "$(APP_NAME)_{{.OS}}_{{.Arch}}" -ldflags "-s -w $(AUTO_VERSIONING)" ../
 	$(call colorecho,"begin compress binary with upx ...")
 	upx ./release/$(APP_NAME)_*
 	cp -r ./console/dist ./release/console/
 	rsync -aqP --exclude=node_modules --exclude=scss --exclude=gulpfile.js  --exclude=package.json ./theme/ ./release/theme
+	cp -r ./i18 ./release/
 	cp pipe.json ./release/pipe.json
 	$(call colorecho,"begin generate md5sum ...")
 	md5sum ./release/$(APP_NAME)_* > ./release/$(APP_NAME).md5sum.txt

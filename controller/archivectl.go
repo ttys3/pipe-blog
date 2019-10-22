@@ -22,7 +22,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/b3log/pipe/i18n"
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 	"github.com/b3log/pipe/util"
@@ -37,7 +36,7 @@ func showArchivesAction(c *gin.Context) {
 	archiveModels := service.Archive.GetArchives(blogID)
 	for _, archiveModel := range archiveModels {
 		archive := &model.ThemeArchive{
-			Title:        i18n.GetMessagef(locale, "archiveYearMonth", archiveModel.Year, archiveModel.Month),
+			Title:        service.GetMessagef(locale, "archiveYearMonth", archiveModel.Year, archiveModel.Month),
 			URL:          getBlogURL(c) + util.PathArchives + "/" + archiveModel.Year + "/" + archiveModel.Month,
 			ArticleCount: archiveModel.ArticleCount,
 		}
@@ -45,7 +44,7 @@ func showArchivesAction(c *gin.Context) {
 	}
 
 	dataModel["Archives"] = themeArchives
-	dataModel["Title"] = i18n.GetMessage(locale, "archives") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = service.GetMessage(locale, "archives") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/archives.html", dataModel)
 }
@@ -127,12 +126,12 @@ func showArchiveArticlesAction(c *gin.Context) {
 	dataModel["Articles"] = articles
 	dataModel["Pagination"] = pagination
 	dataModel["Archive"] = &model.ThemeArchive{
-		Title:        i18n.GetMessagef(locale, "archiveYearMonth", archiveModel.Year, archiveModel.Month),
+		Title:        service.GetMessagef(locale, "archiveYearMonth", archiveModel.Year, archiveModel.Month),
 		URL:          getBlogURL(c) + util.PathArchives + "/" + archiveModel.Year + "/" + archiveModel.Month,
 		ArticleCount: archiveModel.ArticleCount,
 	}
-	dataModel["Title"] = i18n.GetMessagef(locale, "archiveYearMonth", archiveModel.Year, archiveModel.Month) +
-		" - " + i18n.GetMessage(locale, "archives") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = service.GetMessagef(locale, "archiveYearMonth", archiveModel.Year, archiveModel.Month) +
+		" - " + service.GetMessage(locale, "archives") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/archive-articles.html", dataModel)
 }

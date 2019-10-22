@@ -23,7 +23,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/b3log/pipe/i18n"
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 	"github.com/b3log/pipe/util"
@@ -46,7 +45,7 @@ func showTagsAction(c *gin.Context) {
 		themeTags = append(themeTags, themeTag)
 	}
 	dataModel["Tags"] = themeTags
-	dataModel["Title"] = i18n.GetMessage(locale, "tags") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = service.GetMessage(locale, "tags") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/tags.html", dataModel)
 }
@@ -130,7 +129,7 @@ func showTagArticlesAction(c *gin.Context) {
 		URL:          getBlogURL(c) + util.PathTags + "/" + tagModel.Title,
 		ArticleCount: tagModel.ArticleCount,
 	}
-	dataModel["Title"] = tagModel.Title + " - " + i18n.GetMessage(locale, "tags") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = tagModel.Title + " - " + service.GetMessage(locale, "tags") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/tag-articles.html", dataModel)
 }

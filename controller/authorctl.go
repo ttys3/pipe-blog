@@ -22,7 +22,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/b3log/pipe/i18n"
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 	"github.com/b3log/pipe/util"
@@ -48,7 +47,7 @@ func showAuthorsAction(c *gin.Context) {
 	}
 
 	dataModel["Authors"] = themeAuthors
-	dataModel["Title"] = i18n.GetMessage(locale, "team") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = service.GetMessage(locale, "team") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/authors.html", dataModel)
 }
@@ -128,7 +127,7 @@ func showAuthorArticlesAction(c *gin.Context) {
 		Name:         author.Name,
 		ArticleCount: userBlog.UserArticleCount,
 	}
-	dataModel["Title"] = authorName + " - " + i18n.GetMessage(locale, "team") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = authorName + " - " + service.GetMessage(locale, "team") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/author-articles.html", dataModel)
 }

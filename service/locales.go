@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Package i18n includes internationalization related manipulations.
-package i18n
+package service
 
 import (
 	"encoding/json"
@@ -39,8 +39,8 @@ type locale struct {
 
 var locales = map[string]locale{}
 
-// Load loads i18n message configurations.
-func Load() {
+// LoadI18n loads i18n message configurations.
+func LoadI18n() {
 	f, _ := os.Open("i18n")
 	names, _ := f.Readdirnames(-1)
 	f.Close()

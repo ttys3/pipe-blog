@@ -24,7 +24,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/b3log/pipe/i18n"
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 	"github.com/b3log/pipe/util"
@@ -102,7 +101,7 @@ func resolveBlog(c *gin.Context) {
 
 func fillCommon(c *gin.Context) {
 	if "dev" == model.Conf.RuntimeMode {
-		i18n.Load()
+		service.LoadI18n()
 	}
 
 	userBlogVal, _ := c.Get("userBlog")
@@ -113,7 +112,7 @@ func fillCommon(c *gin.Context) {
 	dataModel := dataModelVal.(*DataModel)
 
 	localeSetting := service.Setting.GetSetting(model.SettingCategoryI18n, model.SettingNameI18nLocale, blogID)
-	i18ns := i18n.GetMessages(localeSetting.Value)
+	i18ns := service.GetMessages(localeSetting.Value)
 	i18nMap := map[string]interface{}{}
 	for key, value := range i18ns {
 		i18nMap[strings.Title(key)] = value

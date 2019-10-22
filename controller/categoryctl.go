@@ -23,7 +23,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/b3log/pipe/i18n"
 	"github.com/b3log/pipe/model"
 	"github.com/b3log/pipe/service"
 	"github.com/b3log/pipe/util"
@@ -59,7 +58,7 @@ func showCategoriesAction(c *gin.Context) {
 	}
 
 	dataModel["Categories"] = themeCategories
-	dataModel["Title"] = i18n.GetMessage(locale, "categories") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = service.GetMessage(locale, "categories") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/categories.html", dataModel)
 }
@@ -143,7 +142,7 @@ func showCategoryArticlesArticlesAction(c *gin.Context) {
 		Title:        categoryModel.Title,
 		ArticleCount: pagination.RecordCount,
 	}
-	dataModel["Title"] = categoryModel.Title + " - " + i18n.GetMessage(locale, "categories") + " - " + dataModel["Title"].(string)
+	dataModel["Title"] = categoryModel.Title + " - " + service.GetMessage(locale, "categories") + " - " + dataModel["Title"].(string)
 
 	c.HTML(http.StatusOK, getTheme(c)+"/category-articles.html", dataModel)
 }
