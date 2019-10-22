@@ -17,13 +17,13 @@ define colorecho
       @TERM=xterm-256color tput sgr0
 endef
 
-prep:
-	test -x "$$(command -v rice)" || GO111MODULE=on go install github.com/GeertJohan/go.rice/rice
-	test -x "$$(command -v gox)" || GO111MODULE=on go install github.com/mitchellh/gox
-
 all: ui-admin ui-theme debug
 
 release: ui-admin ui-theme linux
+
+prep:
+	test -x "$$(command -v rice)" || GO111MODULE=on go install github.com/GeertJohan/go.rice/rice
+	test -x "$$(command -v gox)" || GO111MODULE=on go install github.com/mitchellh/gox
 
 crossbuild: prep
 	$(call colorecho,"remove release dir ...")
