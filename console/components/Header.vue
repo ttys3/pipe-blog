@@ -41,12 +41,6 @@
                        :aria-label="$store.state.nickname || $store.state.name"></div>
           </v-toolbar-title>
           <v-list>
-            <v-list-tile @click="switchBlog(item)"
-                         v-if="$store.state.blogs.length > 1"
-                         v-for="item in $store.state.blogs"
-                         :key="item.id" class="list__tile--link">
-              {{ item.title }}
-            </v-list-tile>
             <v-list-tile
               @click="goHome"
               v-if="$route.path.indexOf('/admin') > -1">
@@ -68,8 +62,6 @@
 </template>
 
 <script>
-  import { initParticlesJS } from '~/plugins/utils'
-
   export default {
     methods: {
       goAdmin () {
@@ -79,11 +71,7 @@
         }
       },
       goHome () {
-        this.$router.push('/')
-        this.$store.commit('setBodySide', '')
-        setTimeout(() => {
-          initParticlesJS('particles')
-        }, 200)
+        window.location.href = '/'
       },
       toggleSide () {
         const className = document.querySelector('#pipe').className
@@ -91,22 +79,6 @@
           document.querySelector('#pipe').className = 'body--side'
         } else {
           document.querySelector('#pipe').className = ''
-        }
-      },
-      async switchBlog (item) {
-        if (item.URL === this.$store.state.blogURL) {
-          return
-        }
-        const responseData = await this.axios.post(`/console/blogs/switch/${item.id}`)
-        if (responseData.code === 0) {
-          item.role = responseData.data
-          this.$store.commit('setBlog', item)
-          this.$router.go()
-        } else {
-          this.commit('setSnackBar', {
-            snackBar: true,
-            snackMsg: responseData.msg
-          })
         }
       },
       async logout () {
