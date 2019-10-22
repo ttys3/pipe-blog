@@ -29,18 +29,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func showIndexAction(c *gin.Context) {
-	t, err := template.ParseFiles("console/dist/index.html")
-	if nil != err {
-		logger.Errorf("load index page failed: " + err.Error())
-		c.String(http.StatusNotFound, "load index page failed")
-
-		return
-	}
-
-	t.Execute(c.Writer, nil)
-}
-
 func showStartPageAction(c *gin.Context) {
 	t, err := template.ParseFiles("console/dist/login/index.html")
 	if nil != err {
