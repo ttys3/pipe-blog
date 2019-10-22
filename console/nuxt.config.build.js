@@ -1,4 +1,5 @@
-const env = require(`../pipe.tpl.json`)
+require('toml-require').install({})
+const env = require(`../nanoblog.tpl.toml`)
 
 module.exports = {
   env,

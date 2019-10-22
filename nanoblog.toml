@@ -1,0 +1,18 @@
+# nanoblog config file
+
+Server="http://localhost:8089"
+Port="8089"
+Cert=""
+Key=""
+StoragePath="./storage"
+StaticServer=""
+RuntimeMode="dev"
+LogLevel="debug"
+ShowSQL=false
+SessionSecret="vFvCBveihT7PKQCsjn8xv8PaVinIen47"
+SessionMaxAge=86400
+SQLite="${home}/nanoblog.db"
+MySQL="user:password@(localhost:3306)/pipe?charset=utf8mb4&parseTime=True&loc=Local"
+StaticRoot=""
+AxiosBaseURL="/api"
+MockServer="http://localhost:8888"

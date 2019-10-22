@@ -55,15 +55,6 @@ gulp.task('watch',
   gulp.parallel(themeSassProcessWatch, baseSassProcessWatch, devJSProcessWatch))
 
 function updateVersion () {
-  // set static version
-  const newVersion = (new Date()).getTime()
-
-  // set pipe.json
-  fs.writeFileSync('../pipe.json',
-    fs.readFileSync('../pipe.json', 'UTF-8').
-      replace(/"StaticResourceVersion": "\d{13}"/,
-        `"StaticResourceVersion": "${newVersion}"`), 'UTF-8')
-
   // min sw.min.js.tpl
   browserify({entries: `./sw.js`}).
     transform('babelify', {presets: ['@babel/preset-env']}).

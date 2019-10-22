@@ -8,8 +8,9 @@ GOPROXY := https://goproxy.cn,direct
 CGO_ENABLED := 1
 #GOX_OSARCH := linux/amd64 linux/arm64 darwin/amd64 windows/amd64
 PKG_URL := github.com/b3log/pipe/model
+STATIC_RES_VER := $(shell date +%s)
 APP_VERSION := $(shell cat build.version)
-AUTO_VERSIONING := -X $(PKG_URL).Version=$(APP_VERSION)
+AUTO_VERSIONING := -X $(PKG_URL).Version=$(APP_VERSION) -X $(PKG_URL).StaticResourceVersion=$(STATIC_RES_VER)
 
 define colorecho
       @TERM=xterm-256color tput setaf 6
@@ -41,16 +42,16 @@ docker: prep ui-admin ui-theme
 	rm -rf ./release/theme/scss/animate.css
 	cp -r ./i18n ./release/
 	cp ./storage/.gitignore ./release/storage/
-	cp pipe.json ./release/pipe.json
-	sed -i 's/"RuntimeMode": "dev",/"RuntimeMode": "release",/' ./release/pipe.json
-	sed -i 's/"LogLevel": "debug",/"LogLevel": "info",/' ./release/pipe.json
+	cp nanoblog.toml ./release/nanoblog.toml
+	sed -i 's/RuntimeMode="dev"/RuntimeMode="release"/' ./release/nanoblog.toml
+	sed -i 's/LogLevel="debug"/LogLevel="info"/' ./release/nanoblog.toml
 	$(call colorecho,"begin generate md5sum ...")
 	md5sum ./release/$(APP_NAME) > ./release/$(APP_NAME).md5sum.txt
 	ls -lhp ./release
 	$(call colorecho,"done.")
 
 debug:
-	GOPROXY=$(GOPROXY) go build -o "$(APP_NAME)" -i -v .
+	GOPROXY=$(GOPROXY) go build -o "$(APP_NAME)" -i -v -ldflags "$(AUTO_VERSIONING)" .
 
 win:
 	GO111MODULE=on CGO_ENABLED=1 go build -o "$(APP_NAME)" -ldflags "-s -w $(AUTO_VERSIONING)"

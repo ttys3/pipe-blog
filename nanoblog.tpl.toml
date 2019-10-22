@@ -1,0 +1,4 @@
+Server=http://server.tpl.json
+StaticServer=http://staticserver.tpl.json
+StaticResourceVersion=${StaticResourceVersion}
+AxiosBaseURL=/api

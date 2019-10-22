@@ -1,4 +1,5 @@
-const env = require(`../pipe.json`)
+require('toml-require').install({})
+const env = require(`../nanoblog.toml`)
 
 module.exports = {
   env,

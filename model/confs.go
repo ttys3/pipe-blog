@@ -18,15 +18,14 @@
 package model
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/b3log/gulu"
 	"github.com/jinzhu/gorm"
 )
@@ -36,6 +35,8 @@ var logger = gulu.Log.NewLogger(os.Stdout)
 
 // Version of Pipe.
 var Version = "1.8.9"
+
+var StaticResourceVersion = "dev"
 
 // Conf of Pipe.
 var Conf *Configuration
@@ -55,9 +56,9 @@ const tablePrefix = "b3_pipe_"
 // ZeroPushTime represents zero push time.
 var ZeroPushTime, _ = time.Parse("2006-01-02 15:04:05", "2006-01-02 15:04:05")
 
-// Configuration (pipe.json).
+// Configuration (nanoblog.toml).
 type Configuration struct {
-	Server                string // server scheme, host and port
+	Server                string `toml:"Server"` // server scheme, host and port
 	StaticServer          string // static resources server scheme, host and port
 	StaticResourceVersion string // version of static resources
 	LogLevel              string // logging level: trace/debug/info/warn/error/fatal
@@ -79,11 +80,10 @@ type Configuration struct {
 // LoadConf loads the configurations. Command-line arguments will override configuration file.
 func LoadConf() {
 	version := flag.Bool("version", false, "prints current pipe version")
-	confPath := flag.String("conf", "pipe.json", "path of pipe.json")
+	confPath := flag.String("conf", "nanoblog.toml", "path of nanoblog.toml")
 	confStorage := flag.String("storage", "./storage", "path to storage dir")
 	confServer := flag.String("server", "", "this will override Conf.Server if specified")
 	confStaticServer := flag.String("static_server", "", "this will override Conf.StaticServer if specified")
-	confStaticResourceVer := flag.String("static_resource_ver", "", "this will override Conf.StaticResourceVersion if specified")
 	confLogLevel := flag.String("log_level", "", "this will override Conf.LogLevel if specified")
 	confShowSQL := flag.Bool("show_sql", false, "this will override Conf.ShowSQL if specified")
 	confSessionSecret := flag.String("session_secret", "", "this will override Conf.SessionSecret")
@@ -110,8 +110,9 @@ func LoadConf() {
 	}
 
 	Conf = &Configuration{}
-	if err = json.Unmarshal(bytes, Conf); nil != err {
-		logger.Fatal("parses [pipe.json] failed: ", err)
+	if _, err := toml.Decode(string(bytes), Conf); err != nil {
+		// handle error
+		logger.Fatal("parse [nanoblog.toml] failed: ", err)
 	}
 
 	gulu.Log.SetLevel(Conf.LogLevel)
@@ -181,12 +182,8 @@ func LoadConf() {
 		Conf.StoragePath = *confStorage
 	}
 
-	ts := strconv.FormatInt(time.Now().UnixNano(), 10)
-	logger.Debugf("${time} [%s]", ts)
-	Conf.StaticResourceVersion = strings.Replace(Conf.StaticResourceVersion, "${time}", ts, 1)
-	if "" != *confStaticResourceVer {
-		Conf.StaticResourceVersion = *confStaticResourceVer
-	}
+	// from build flag
+	Conf.StaticResourceVersion = StaticResourceVersion
 
 	Conf.SQLite = strings.Replace(Conf.SQLite, "${home}", home, 1)
 	if "" != *confSQLite {

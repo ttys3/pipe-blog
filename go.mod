@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.37.1 // indirect
+	github.com/BurntSushi/toml v0.3.1
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/araddon/dateparse v0.0.0-20190223010137-262228af701e
 	github.com/b3log/gulu v0.0.0-20190806034141-2b1d1b33ff3d
