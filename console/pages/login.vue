@@ -40,8 +40,8 @@
     methods: {
       async doLogin () {
         const responseData = await this.axios.post(`/login`, {
-          username: this.username,
-          password: this.password,
+          username: this.username.trim(),
+          password: this.password.trim(),
         })
         return responseData
       },
