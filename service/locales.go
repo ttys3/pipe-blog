@@ -28,9 +28,6 @@ import (
 	"github.com/b3log/gulu"
 )
 
-// Logger
-var logger = gulu.Log.NewLogger(os.Stdout)
-
 type locale struct {
 	Name     string
 	Langs    map[string]interface{}
