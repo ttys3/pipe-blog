@@ -1,3 +1,3 @@
 #!/bin/bash
 
-GOPROXY=https://goproxy.cn,direct go build -i -v && ./pipe
+rm -rf ./pipe && GOPROXY=https://goproxy.cn,direct go build -i -v && ./pipe
