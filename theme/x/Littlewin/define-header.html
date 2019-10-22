@@ -61,7 +61,7 @@
                     {{.I18n.Team}}
                 </a>
                 {{end}}
-                <a href="{{.BlogURL}}/atom" target="_blank">
+                <a href="{{.BlogURL}}/atom" onclick="prompt('Atom URL: ', this.href);return false;">
                     {{.I18n.Feed}}
                 </a>
             </nav>

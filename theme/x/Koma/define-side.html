@@ -90,7 +90,7 @@
                 </svg>
             </a>
 
-            <a href="{{.BlogURL}}/atom" target="_blank" aria-label="{{.I18n.Feed}}"
+            <a href="{{.BlogURL}}/atom" onclick="prompt('Atom URL: ', this.href);return false;">
                class="pipe-tooltipped pipe-tooltipped--e">
                 <svg>
                     <use xlink:href="#icon-feed"></use>

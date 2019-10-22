@@ -51,7 +51,7 @@
         {{.Title}}
     </a>
     {{end}}
-    <a href="{{.BlogURL}}/atom" target="_blank" class="fn__flex-center">
+    <a href="{{.BlogURL}}/atom" onclick="prompt('Atom URL: ', this.href);return false;" class="fn__flex-center">
         <svg>
             <use xlink:href="#icon-feed"></use>
         </svg>

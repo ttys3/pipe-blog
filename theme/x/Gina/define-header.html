@@ -33,7 +33,7 @@
             {{.Title}}
         </a>
         {{end}}
-        <a href="{{.BlogURL}}/atom" target="_blank">
+        <a href="{{.BlogURL}}/atom" onclick="prompt('Atom URL: ', this.href);return false;">
             <svg><use xlink:href="#feed"></use></svg>
             {{.I18n.Feed}}
         </a>
