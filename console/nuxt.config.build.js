@@ -13,8 +13,8 @@ module.exports = {
       {name: 'robots', content: 'none'},
     ],
     link: [
-      {rel: 'icon', type: 'image/x-icon', href: '/console/favicon.ico'},
-      { rel: 'manifest', href: `/console/manifest.json` }
+      {rel: 'icon', type: 'image/x-icon', href: '/api/console/favicon.ico'},
+      { rel: 'manifest', href: `/api/console/manifest.json` }
     ],
   },
   /*
