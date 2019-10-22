@@ -80,7 +80,7 @@ func MarkdownAction(c *gin.Context) {
 }
 
 var uploadTokenCheckTime, uploadTokenTime int64
-var uploadToken, uploadURL = "no-token-needed", "http://localhost:5897/api/console/upload"
+var uploadToken, uploadURL = "no-token-needed", "/api/console/upload"
 
 type UploadApiData struct {
 	UploadToken string `json:"uploadToken"`
@@ -92,9 +92,10 @@ func UploadTokenAction(c *gin.Context) {
 	result := gulu.Ret.NewResult()
 	defer c.JSON(http.StatusOK, result)
 
+	blogURLSetting := service.Setting.GetSetting(model.SettingCategoryBasic, model.SettingNameBasicBlogURL, 1)
 	result.Data = UploadApiData{
 		UploadToken: uploadToken,
-		UploadURL: uploadURL,
+		UploadURL: blogURLSetting.Value + uploadURL,
 	}
 	return
 
@@ -238,7 +239,7 @@ func GetArticlesAction(c *gin.Context) {
 	session := util.GetSession(c)
 	articleModels, pagination := service.Article.ConsoleGetArticles(c.Query("key"), util.GetPage(c), session.BID)
 	blogURLSetting := service.Setting.GetSetting(model.SettingCategoryBasic, model.SettingNameBasicBlogURL, session.BID)
-
+	
 	var articles []*ConsoleArticle
 	for _, articleModel := range articleModels {
 		var consoleTags []*ConsoleTag
