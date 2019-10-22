@@ -61,7 +61,7 @@ ui-admin:
 	cd console && yarn install && yarn run build
 
 ui-theme:
-	cd theme && yarn install && yarn run build
+	cd theme && yarn install && yarn add aplayer && yarn run build
 
 dev:
 	cd console && yarn install && yarn run dev
