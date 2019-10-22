@@ -62,15 +62,18 @@ type Configuration struct {
 	StaticResourceVersion string // version of static resources
 	LogLevel              string // logging level: trace/debug/info/warn/error/fatal
 	ShowSQL               bool   // whether print sql in log
+	SSL                   bool
 	SessionSecret         string // HTTP session secret
 	SessionMaxAge         int    // HTTP session max age (in second)
 	RuntimeMode           string // runtime mode (dev/prod)
 	SQLite                string // SQLite database file path
 	MySQL                 string // MySQL connection URL
 	Port                  string // listen port
+	Cert                  string // https cert
+	Key                   string // https key
 	AxiosBaseURL          string // axio base URL
 	MockServer            string // mock server
-	StoragePath			  string
+	StoragePath           string
 }
 
 // LoadConf loads the configurations. Command-line arguments will override configuration file.
@@ -89,6 +92,8 @@ func LoadConf() {
 	confSQLite := flag.String("sqlite", "", "this will override Conf.SQLite if specified")
 	confMySQL := flag.String("mysql", "", "this will override Conf.MySQL if specified")
 	confPort := flag.String("port", "", "this will override Conf.Port if specified")
+	confCert := flag.String("cert", "", "path to https certificate file")
+	confKey := flag.String("key", "", "path to https private key file")
 	s2m := flag.Bool("s2m", false, "dumps SQLite data to MySQL SQL script file")
 
 	flag.Parse()
@@ -141,8 +146,28 @@ func LoadConf() {
 		Conf.RuntimeMode = *confRuntimeMode
 	}
 
+	//@TODO fixup Conf.Server if the port does not match Conf.Port
+	if "" != *confPort {
+		Conf.Port = *confPort
+	}
+
+	if "" != *confCert {
+		Conf.Cert = *confCert
+	}
+
+	if "" != *confKey {
+		Conf.Key = *confKey
+	}
+
 	if "" != *confServer {
 		Conf.Server = *confServer
+	}
+
+	if Conf.Cert != "" && Conf.Key != "" {
+		Conf.Server = strings.Replace(Conf.Server, "http://", "https://", 1)
+		Conf.SSL = true
+	} else {
+		Conf.SSL = false
 	}
 
 	if "" != *confStaticServer {
@@ -156,9 +181,9 @@ func LoadConf() {
 		Conf.StoragePath = *confStorage
 	}
 
-	time := strconv.FormatInt(time.Now().UnixNano(), 10)
-	logger.Debugf("${time} [%s]", time)
-	Conf.StaticResourceVersion = strings.Replace(Conf.StaticResourceVersion, "${time}", time, 1)
+	ts := strconv.FormatInt(time.Now().UnixNano(), 10)
+	logger.Debugf("${time} [%s]", ts)
+	Conf.StaticResourceVersion = strings.Replace(Conf.StaticResourceVersion, "${time}", ts, 1)
 	if "" != *confStaticResourceVer {
 		Conf.StaticResourceVersion = *confStaticResourceVer
 	}
@@ -170,10 +195,6 @@ func LoadConf() {
 	if "" != *confMySQL {
 		Conf.MySQL = *confMySQL
 		Conf.SQLite = ""
-	}
-
-	if "" != *confPort {
-		Conf.Port = *confPort
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {

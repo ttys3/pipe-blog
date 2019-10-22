@@ -74,8 +74,14 @@ func main() {
 
 	handleSignal(server)
 
+	var err error
 	logger.Infof("NanoBlog (v%s) is running [%s]", model.Version, model.Conf.Server)
-	if err := server.ListenAndServe(); nil != err {
+	if model.Conf.Cert != "" && model.Conf.Key != "" {
+		err = server.ListenAndServeTLS(model.Conf.Cert, model.Conf.Key)
+	} else {
+		err = server.ListenAndServe()
+	}
+	if nil != err {
 		logger.Fatalf("listen and serve failed: " + err.Error())
 	}
 }

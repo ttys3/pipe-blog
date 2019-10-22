@@ -17,6 +17,6 @@ COPY --from=GO_BUILD /go/src/github.com/b3log/pipe/ /opt/pipe/
 RUN apk add --no-cache ca-certificates tzdata
 
 ENV TZ=Asia/Shanghai
-EXPOSE 5897
+EXPOSE 8089
 
 ENTRYPOINT [ "/opt/pipe/pipe" ]

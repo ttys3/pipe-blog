@@ -136,6 +136,15 @@ func fillCommon(c *gin.Context) {
 		settingMap[strings.Title(setting.Name)] = v
 		settingMap[setting.Name] = v
 	}
+
+	// fixup SSL
+	blogUrlTemp := settingMap[model.SettingNameBasicBlogURL].(string)
+	if model.Conf.SSL && strings.HasPrefix(blogUrlTemp, "http://") {
+		settingMap[model.SettingNameBasicBlogURL] = strings.Replace(blogUrlTemp, "http://", "https://", 1)
+	} else if !model.Conf.SSL && strings.HasPrefix(blogUrlTemp, "https://") {
+		settingMap[model.SettingNameBasicBlogURL] = strings.Replace(blogUrlTemp, "https://", "http://", 1)
+	}
+	
 	//logger.Debugf("fillCommon(): settingMap: %#v", settingMap)
 	settingMap[strings.Title(model.SettingNameBasicHeader)] = template.HTML(settingMap[model.SettingNameBasicHeader].(string))
 	settingMap[strings.Title(model.SettingNameBasicFooter)] = template.HTML(settingMap[model.SettingNameBasicFooter].(string))
